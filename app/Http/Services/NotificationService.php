@@ -5,22 +5,28 @@ namespace App\Http\Services;
 use App\Models\PriceNotification;
 use App\Models\Product;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class NotificationService
 {
     public function snedPriceNotification(Product $product): void
     {
-        $users = $product->users->filter(function($user) use ($product) {
-            return $user->pivot->price >= $product->price;
-        });
-        $this->storeDatabaseNotification($product,$users);
-        $this->sendRealTimeNotification($product,$users);
+        $productID = $product->id;
+        $lastPrice = $product->last_price;
+        $users = User::whereHas('products', function ($query) use ($productID, $lastPrice) {
+            $query->where('product_id', $productID)
+                ->where('price', '>', $lastPrice);
+        })  ->get();
+
+        if (!$users->isEmpty()) {
+            $this->storeDatabaseNotification($product,$users);
+            $this->sendRealTimeNotification($product,$users);
+        }
     }
 
     function sendRealTimeNotification($product,$users): void
     {
         $tokens = $users->pluck('fcm_token');
-
         $title = $product->product_name . 'تنبيه تحديث في سعر المنتج : ';
         $SERVER_API_KEY = 'AAAAgzxdbFg:APA91bHpS8bkZRzv9EfT4U1QVmkIoCnUDKVJP5fDYEcsIkz2hoB73og1ooWcGj2JUpdN2KRRttcBUfrt67Im6CqrwHd7sV-fo4hW6MV7kPgSrg_lFqJQcNnJVSlyIoCzPY0IzxOB0RbQ';
         $SENDER_ID = '563653471320';

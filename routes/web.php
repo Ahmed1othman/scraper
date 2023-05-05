@@ -3,9 +3,11 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Jobs\ScrapeProduct;
 use App\Models\Product;
 use App\Models\Proxy;
+use App\Models\User;
 use Goutte\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -35,6 +37,7 @@ use Symfony\Component\HttpClient\HttpClient;
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
         Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
+        Route::resource('users',UserController::class);
         Route::resource('products',ProductController::class);
     });
 
@@ -238,10 +241,23 @@ Route::get('sendNotification',function (){
     foreach ($products as $product) {
         try {
             dispatch(new ScrapeProduct($product));
-            return "done";
         }catch (\Exception $exception){
             Log::info($exception->getMessage());
         }
 
     }
 });
+
+Route::get('test-array',function (){
+    $product = Product::find(1);
+    $productID = $product->id;
+    $lastPrice = $product->last_price;
+
+    return $users = User::whereHas('products', function ($query) use ($productID, $lastPrice) {
+        $query->where('product_id', $productID)
+            ->where('price', '>', $lastPrice);
+    })  ->get();
+
+});
+
+

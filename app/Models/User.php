@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -62,6 +63,20 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+//scope
+    public function scopeNormalUsers($query)
+    {
+        return $query->whereHas('roles', function ($query) {
+            $query->where('name', 'normal user');
+        });
+    }
+
+    public function scopeNormalUserCount($query)
+    {
+        return $query->whereHas('roles', function ($query) {
+            $query->where('name', 'normal user');
+        })->count();
+    }
 
     //rel
     public function products()

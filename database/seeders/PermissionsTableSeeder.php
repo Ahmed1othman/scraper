@@ -49,17 +49,18 @@ class PermissionsTableSeeder extends Seeder
             }
         }
 
-        $user = User::updateOrCreate(
+        $user1 = User::updateOrCreate(
             ['email' => 'super@email.com'],
-            ['name' => 'super admin', 'email' => 'super@email.com','phone'=>'01011052263', 'password' => bcrypt('12345678')]
+            ['name' => 'super admin', 'email' => 'super@email.com','phone'=>'01011052263', 'password' => bcrypt('12345678'),'status'=>1]
         );
-        $user = User::updateOrCreate(
+        $user2 = User::updateOrCreate(
             ['email' => 'admin@email.com'],
-            ['name' => 'admin', 'email' => 'admin@email.com','phone'=>'01022232169', 'password' => bcrypt('12345678')]
+            ['name' => 'admin', 'email' => 'admin@email.com','phone'=>'01022232169', 'password' => bcrypt('12345678'),'status'=>1]
         );
 
         $adminRole = Role::updateOrCreate(['name' => 'Super Admin'],['name' => 'Super Admin']);
-        $user->assignRole($adminRole);
+        $user1->assignRole($adminRole);
+        $user2->assignRole($adminRole);
 
         $userRole = Role::updateOrCreate(['name' => 'normal user'],['name' => 'normal user']);
         $userPermissions = Permission::whereIn('group',['products'])->get('name')->toArray();

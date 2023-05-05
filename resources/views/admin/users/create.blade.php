@@ -31,42 +31,34 @@
         <x-alerts.validation-errors :errors="$errors" />
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{__('admin.add product')}}</h4>
+                <h4 class="card-title">{{__('admin.add user')}}</h4>
             </div>
             <div class="card-body">
-                <form id="jquery-val-form" method="post" action="{{route('products.store')}}">
+                <form id="jquery-val-form" method="post" action="{{route('users.store')}}">
                     @csrf
-                    <div class="mb-1">
-                        <label class="form-label" for="basic-default-name">{{__('admin.product name')}}</label>
-                        <input type="text" class="form-control" id="basic-default-name" name="product_name" placeholder="example: headphone JPL gaming " />
-                    </div>
+                    <div class="row">
+                        <div class="mb-1 col-md-6">
+                            <label class="form-label" for="basic-default-phone">{{__('admin.user name')}}</label>
+                            <input type="text" class="form-control" id="basic-default-name" name="name" placeholder="example: ali mohamed" />
+                        </div>
 
-                    <div class="mb-1">
-                        <label class="form-label" for="basic-default-name">{{__('admin.product price')}}</label>
-                        <input type="number" class="form-control" id="basic-default-name" name="price" placeholder="example: 255.50 " />
-                    </div>
+                        <div class="mb-1 col-md-6">
+                            <label class="form-label" for="basic-default-name">{{__('admin.user phone')}}</label>
+                            <input type="number" maxlength="11" minlength="11" class="form-control" id="basic-default-name" name="phone" placeholder="example: 01011111111" />
+                        </div>
+                        <div class="mb-1 col-md-6">
+                            <label class="form-label" for="basic-default-email">{{__('admin.email')}}</label>
+                            <input type="email" class="form-control" id="basic-default-email" name="email" placeholder="example: example@gmail.com" />
+                        </div>
 
-
-                    <div class="mb-1">
-                        <label class="form-label" for="select-country">platform</label>
-                        <select class="form-select select2" id="select-country" name="platform">
-                            <option value="">Select Country</option>
-                            <option value="amazon">{{__('admin.amazon')}}</option>
-                            <option value="noon">{{__('admin.noon')}}</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-1">
-                        <label class="form-label" for="basic-default-name">{{__('admin.product link')}}</label>
-                        <input type="url" class="form-control" id="basic-default-name" name="url" placeholder="example: https://www.amazon.com/-/ar/dp/B09TZWLFLY/ref=sr_1_3?keywords=gaming+keyboard&pd_rd_r=5f71b593-53e6-4ba3-8725-dc815a9c82fe&pd_rd_w=3v0SO&pd_rd_wg=XYBga&pf_rd_p=a40e46f4-82c3-4cd6-9dec-86b71c578caa&pf_rd_r=JS84B3NQACBTD944XQD8&qid=1682374184&sr=8-3" />
-                    </div>
-
-                    <div class="mb-1">
-                        <div class="form-check">
-                            <input type="checkbox" name="status" class="form-check-input" id="validationCheckBootstrap" />
-                            <label class="form-check-label" for="validationCheckBootstrap">{{__('admin.product status')}}</label>
+                        <div class="mb-1 col-12">
+                            <div class="form-check">
+                                <input type="checkbox" name="status" class="form-check-input" id="validationCheckBootstrap" />
+                                <label class="form-check-label" for="validationCheckBootstrap">{{__('admin.user status')}}</label>
+                            </div>
                         </div>
                     </div>
+
                     <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
                 </form>
             </div>

@@ -34,12 +34,36 @@
         <div class="shadow-bottom"></div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+                {{--dashboard--}}
                 <li class="nav-item">
                     <a class="d-flex align-items-center {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                         <i data-feather="home"></i>
                         <span class="menu-title text-truncate" data-i18n="Dashboards">{{ __('admin.dashboard') }}</span>
                     </a>
                 </li>
+                {{--users--}}
+                <li class="nav-item">
+                    <a class="d-flex align-items-center {{ request()->routeIs('users.*') ? 'active' : '' }}" href="#">
+                        <i data-feather="users"></i>
+                        <span class="menu-title text-truncate" data-i18n="Dashboards">{{ __('admin.users') }}</span>
+                        <span class="badge badge-light-success rounded-pill ms-auto me-1">{{\App\Models\User::normalUserCount()}}</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('users.index') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('users.index') }}">
+                                <i data-feather="circle"></i>
+                                <span class="menu-item text-truncate" data-i18n="Analytics">{{ __('admin.users list') }}</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('users.create') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('users.create') }}">
+                                <i data-feather="circle"></i>
+                                <span class="menu-item text-truncate" data-i18n="eCommerce">{{ __('admin.add user') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{--products--}}
                 <li class="nav-item">
                     <a class="d-flex align-items-center {{ request()->routeIs('products.*') ? 'active' : '' }}" href="#">
                         <i data-feather="cpu"></i>
@@ -61,6 +85,7 @@
                         </li>
                     </ul>
                 </li>
+
             </ul>
         </div>
     </div>

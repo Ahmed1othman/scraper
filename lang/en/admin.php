@@ -5,8 +5,6 @@ return [
     'enabled'=>'enabled',
     'disabled'=>'disabled',
 
-
-
     //login page
     'login_for_continue' => 'login for continue',
     'welcome_to' => 'welcome to',
@@ -21,6 +19,16 @@ return [
 
     //dashboard
     'dashboard'=>'dashboard',
+
+    //users
+    'users'=>'users',
+    'users list'=>'users list',
+    'add user'=>'add user',
+    'user name'=>'user name',
+    'user phone'=>'user phone',
+    'user status'=>'user status',
+    'user added successfully'=>'user added successfully',
+
 
     //products
     'products'=>'products',

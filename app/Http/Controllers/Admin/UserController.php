@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users =  User::normalUsers();
         return view('admin.users.index',get_defined_vars());
     }
 
@@ -30,7 +30,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductRequest $request)
+    public function store(UserRequest $request)
     {
 
         Session::flash('success', __('admin.user added successfully'));
