@@ -13,14 +13,24 @@ class ProductController extends Controller
 {
 
     protected $productService;
+
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
     }
 
 
-    public function index(){
+    public function index()
+    {
+        $products = $this->productService->getAllProducts();
+        return response()->json($products);
+    }
 
+
+    public function userProducts()
+    {
+        $products = $this->productService->getAllUserProducts();
+        return response()->json($products);
     }
     public function store(ProductRequest $request){
 
@@ -43,6 +53,14 @@ class ProductController extends Controller
             ]);
 
         return response()->json(['message' => 'success'], 200);
+    }
+    public function show($id)
+    {
+        $product = $this->productService->getProductById($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+        return response()->json($product);
     }
 
 

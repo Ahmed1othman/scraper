@@ -4,8 +4,6 @@
      @yield('title')
 @endsection
 
-
-
 {{-- main content --}}
 @section('main-content')
      @yield('content')

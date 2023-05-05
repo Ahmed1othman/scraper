@@ -40,9 +40,6 @@ class ProductController extends Controller
             'url' => $request->url,
             'platform' => $request->platform,
         ]);
-
-
-
         $user = auth()->user();
         $user->products()
             ->attach($product,[
@@ -58,7 +55,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('admin.products.show',$product);
     }
 
     /**

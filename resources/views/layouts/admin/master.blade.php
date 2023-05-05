@@ -4,7 +4,6 @@
      @yield('title')
 @endsection
 
-
 <!--sidebar wrapper -->
 @section('main-sidebar')
     @include('layouts.main-layout.sidebar')
@@ -32,8 +31,6 @@
 
 {{-- footer --}}
 @section('main-footer')
-    {{-- @yield('footer') --}}
-    {{-- <h1>heres a footer</h1> --}}
     @include('layouts.main-layout.footer')
 @endsection
 

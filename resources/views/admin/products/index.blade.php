@@ -59,7 +59,8 @@
                             <th>{{__('admin.product link')}}</th>
                             <th>{{__('admin.product status')}}</th>
                             <th>{{__('admin.product last price')}}</th>
-                            <th>{{__('admin.product last update')}}</th>
+                            <th>{{__('admin.product last updated price')}}</th>
+                            <th>{{__('admin.last update')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -68,7 +69,7 @@
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$product->product_name}}</td>
                                 <td>{{$product->pivot->price}}</td>
-                                <td>{{$product->url}}</td>
+                                <td><a target="_blank" href="{{$product->url}}"><i data-feather="external-link"></i></a>  </td>
                                 <td>
                                     @if($product->pivot->status)
                                         <span class="badge rounded-pill bg-success">{{__('admin.enabled')}}</span>
@@ -84,7 +85,9 @@
                                         <img style="padding: 0.25rem; height: auto; width: 80px" src="{{asset('app-assets/images/logo/noon_logo.png')}}">
                                     @endif
                                 </td>
-                                <td>{{$product->platform}}</td>
+                                <td>{{$product->last_price}}</td>
+                                <td>{{$product->updated_at->diffForHumans()}}</td>
+
                             </tr>
                         @endforeach
                         </tbody>

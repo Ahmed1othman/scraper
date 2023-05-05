@@ -3,10 +3,20 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Models\Proxy;
 use Goutte\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Sunra\PhpSimple\HtmlDomParser;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpClient\CurlHttpClient;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\HttpClient\HttpClient;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +38,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
 
     Route::get('test/amazon',function (){
-        $client = new Client();
-        $url = 'https://www.amazon.com/All-Metal-Dacoity-Multimedia-Anti-ghosting-Waterproof/dp/B09TZWLFLY/ref=sr_1_3?keywords=gaming+keyboard&pd_rd_r=c41fa7d3-3f9a-4535-858f-213b6da5f3df&pd_rd_w=JDUP7&pd_rd_wg=lweT8&pf_rd_p=12129333-2117-4490-9c17-6d31baf0582a&pf_rd_r=VC1GJXPWMPXV8VSR8ZBJ&qid=1681615286&sr=8-3&language=ar_AE&currency=EGP';
-        $client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
-        $crawler = $client->request('GET', $url);
-        $price = $crawler->filter('.a-price-whole')->text();
-        return response()->json(['price' => $price, 'time' => now()]);
+
     });
     Route::get('test/noon',function (){
         $client = new Client();
@@ -45,23 +50,23 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         return response()->json(['price' => $price, 'time' => now()]);
 
     });
-    Route::get('test/view',function (){
-       return view('scraper') ;
-    });
+//    Route::get('test/view',function (){
+//       return view('scraper') ;
+//    });
 
 
 });
 
 
-Route::get('test/socket-send',function (){
-    event(new App\Events\AmazonPriceNotify('Hello World'));
-});
+//Route::get('test/socket-send',function (){
+//    event(new App\Events\AmazonPriceNotify('Hello World'));
+//});
 
 
 
-Route::get('test/socket-receive',function (){
-    return view('socket');
-});
+//Route::get('test/socket-receive',function (){
+//    return view('socket');
+//});
 
 
 Route::resource('roles',RoleController::class);
@@ -77,10 +82,9 @@ Route::get('/message', function () {
 
     $SERVER_API_KEY = 'AAAAgzxdbFg:APA91bHpS8bkZRzv9EfT4U1QVmkIoCnUDKVJP5fDYEcsIkz2hoB73og1ooWcGj2JUpdN2KRRttcBUfrt67Im6CqrwHd7sV-fo4hW6MV7kPgSrg_lFqJQcNnJVSlyIoCzPY0IzxOB0RbQ';
     $SENDER_ID = '563653471320';
-    $token_1 = 'fWqoHDx6TsOoE5w5-Ze9Hn:APA91bHnByu5LIUp_aZ9JNjyU7aXDdH33LtAPRwW-5Ea-Hz-3IO7oUGF9-PtOzL6JBs_K5Lw1M2hu-AIgkc_dBv6hW5uv-cvuxUZDWkkKjdj10hVLZJ6boDuNoKk6uv2h7baPXY55yjz';
+    $token_1 = 'e2V33odFv2af9RQuZ07-ka:APA91bHk2ptj2-wSjtlWgdsBBL76lk9tAG5gogbpHF8OHzGcBhaQ1Two8bZ8-Myxu9j5YqoazMoGCjJyDDRqtIk4ymjjDmxgrpI0ibVJjpzfCJHO-KKO1jizTPr6uqLsFDlBYowY7JZM';
 
     $data = [
-
         "registration_ids" => [
             $token_1
         ],
@@ -127,4 +131,101 @@ Route::get('/message', function () {
 
     return $response;
 
+});
+
+Route::get('/proxy',function (){
+
+    $product = \App\Models\Product::find(1);
+    try {
+        $proxy = DB::table('proxies')
+            ->inRandomOrder()
+            ->first();
+
+        if (!$proxy) {
+            // If no proxy found, scrape without proxy
+            $client = HttpClient::create();
+        } else {
+            // Create an HTTP client with the proxy
+            $client = HttpClient::create([
+                'proxy' => sprintf('http://%s:%d', $proxy->ip, $proxy->port),
+                ]);
+        }
+
+        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
+        $response = $client->request('GET', $product->url, [
+            'headers' => [
+                'User-Agent' => $userAgent,
+            ],
+        ]);
+
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode != 200) {
+            // If the status code is not 200, mark the proxy as failed
+            if ($proxy) {
+                DB::table('proxies')->where('id', $proxy->id)->update(['status' => 0]);
+            }
+            Log::info('proxy status false');
+        }
+
+        $html = $response->getContent();
+
+        return $html;
+
+        if ($product->platform == 'amazon') {
+            return $this->extractAmazon($html);
+        } elseif ($product->platform == 'noon') {
+            return $this->extractNoon($html);
+        }
+    } catch (TransportException $exception) {
+        if ($proxy) {
+            DB::table('proxies')->where('id', $proxy->id)->update(['status' => 0]);
+        }
+        return $exception->getMessage();
+    }catch(Exception $ex){
+        return "general " . $ex->getMessage();
+    }
+});
+
+Route::get('scrap-proxy',function (){
+    $client = new Client();
+
+    $url = 'https://free-proxy-list.net/';
+
+    $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
+    $crawler =  $client->request('GET', $url, [
+        'headers' => [
+            'User-Agent' => $userAgent,
+        ],
+    ]);
+
+    $rows = array();
+    $table = $crawler->filter('.table-striped tbody tr')->each(function ($row) {
+        return  array(
+            'ip' => $row->filter('td:nth-child(1)')->text(),
+            'port' => $row->filter('td:nth-child(2)')->text(),
+            'code' => $row->filter('td:nth-child(3)')->text(),
+            'https' => $row->filter('td:nth-child(7)')->text() == "yes" ? true:false,
+        );
+    });
+
+
+
+    if ($table){
+        foreach ($table as $row){
+            if ($row['https'] )
+                Proxy::create($row);
+        }
+
+    }
+});
+
+
+Route::get('test/user',function (){
+    $product = \App\Models\Product::find(1);
+    $users = $product->users->filter(function($user) use ($product) {
+        return $user->pivot->price >= $product->price;
+    });
+
+    return $users->pluck('id');;
 });
