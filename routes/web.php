@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Jobs\ScrapeProduct;
+use App\Models\Product;
 use App\Models\Proxy;
 use Goutte\Client;
 use Illuminate\Http\Request;
@@ -228,4 +230,18 @@ Route::get('test/user',function (){
     });
 
     return $users->pluck('id');;
+
+});
+
+Route::get('sendNotification',function (){
+    $products = Product::all();
+    foreach ($products as $product) {
+        try {
+            dispatch(new ScrapeProduct($product));
+            return "done";
+        }catch (\Exception $exception){
+            Log::info($exception->getMessage());
+        }
+
+    }
 });
