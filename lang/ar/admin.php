@@ -45,6 +45,8 @@ return [
     'last update'=>'اخر تحديث منذ',
     'product last updated price'=>'اخر تحديث للسعر',
     'product added successfully'=>'تم اضافة المنتج بنجاح',
+    'product updated successfully'=>'تم تعديل المنتج بنجاح',
+    'product deleted successfully'=>'تم مسح المنتج بنجاح',
 
 
 

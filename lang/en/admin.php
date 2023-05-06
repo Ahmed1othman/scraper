@@ -39,6 +39,7 @@ return [
     'user status'=>'user status',
     'user added successfully'=>'user added successfully',
     'user updated successfully'=>'user updated successfully',
+    'user deleted successfully'=>'user updated successfully',
 
 
 
