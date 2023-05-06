@@ -85,28 +85,28 @@ Route::get('/save-token', function (Request $request) {
 Route::get('/message', function () {
 
 
-    $SERVER_API_KEY = 'AAAAgzxdbFg:APA91bHpS8bkZRzv9EfT4U1QVmkIoCnUDKVJP5fDYEcsIkz2hoB73og1ooWcGj2JUpdN2KRRttcBUfrt67Im6CqrwHd7sV-fo4hW6MV7kPgSrg_lFqJQcNnJVSlyIoCzPY0IzxOB0RbQ';
-    $SENDER_ID = '563653471320';
-    $token_1 = 'e2V33odFv2af9RQuZ07-ka:APA91bHk2ptj2-wSjtlWgdsBBL76lk9tAG5gogbpHF8OHzGcBhaQ1Two8bZ8-Myxu9j5YqoazMoGCjJyDDRqtIk4ymjjDmxgrpI0ibVJjpzfCJHO-KKO1jizTPr6uqLsFDlBYowY7JZM';
+        $SERVER_API_KEY = 'AAAAIe0Crhg:APA91bH5Vf1j3Gaay-z4hNn-GKxzbbwk_QCA3khn_2ic7GUkB-7fecJjiiXaqrgQJ6XItOdGEqlsoQWYuOSJGcheJrq_3OlK4UyIROoI9JQrcyqoAQdcAMvjZJ_IP9b-MqO9BoWwY7ML';
+        $SENDER_ID = '145710296600';
+    $token_1 = 'e_CBdWH_SqWGEBGeU8akq2:APA91bF9YPqxH6zWOyU6kUFem6vMb8OqavqD_HhPbHmqixBcwy2RXuMaabtFprbKkLO-rJtlLllkzGvQGLF-K77Pia03ic7nMUtgqA7DxI5KhPwDuW93_R_P5AFf8PO3fBf2WUIld1pe';
 
     $data = [
         "registration_ids" => [
             $token_1
         ],
         "notification" => [
-
-            "title" => 'test message for abo adel ',
-
-            "body" => 'عايزين نفطر يسطا ',
-
-            "sound"=> "default" // required for sound on ios
-
+            "title" => "New message",
+            "body" => "You have a new message",
+            "android" => [
+                "notification" => [
+                    "sound" => "notification",
+                ],
+            ],
         ],
-
         "data" => [
             "product_id" => "1"
         ]
     ];
+
 
     $dataString = json_encode($data);
 
@@ -136,7 +136,7 @@ Route::get('/message', function () {
 
     return $response;
 
-});
+}   );
 
 Route::get('/proxy',function (){
 

@@ -28,14 +28,14 @@ class NotificationService
     {
         $tokens = $users->pluck('fcm_token');
         $title = $product->product_name . 'تنبيه تحديث في سعر المنتج : ';
-        $SERVER_API_KEY = 'AAAAgzxdbFg:APA91bHpS8bkZRzv9EfT4U1QVmkIoCnUDKVJP5fDYEcsIkz2hoB73og1ooWcGj2JUpdN2KRRttcBUfrt67Im6CqrwHd7sV-fo4hW6MV7kPgSrg_lFqJQcNnJVSlyIoCzPY0IzxOB0RbQ';
-        $SENDER_ID = '563653471320';
+        $SERVER_API_KEY = 'AAAAIe0Crhg:APA91bH5Vf1j3Gaay-z4hNn-GKxzbbwk_QCA3khn_2ic7GUkB-7fecJjiiXaqrgQJ6XItOdGEqlsoQWYuOSJGcheJrq_3OlK4UyIROoI9JQrcyqoAQdcAMvjZJ_IP9b-MqO9BoWwY7ML';
+        $SENDER_ID = '145710296600';
         $data = [
             "registration_ids" => $tokens,
             "notification" => [
                 "title" => $title,
                 "body" => "تم تحديث سعر المنتج :  " .$product->product_name . " ليصبح : " . $product->last_price,
-                "sound" => "default"
+                "sound" => "notification"
             ],
             "data" => [
                 "product_id" => $product->id
