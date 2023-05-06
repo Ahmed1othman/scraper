@@ -25,6 +25,7 @@ return [
     'users list'=>'users list',
     'add user'=>'add user',
     'user name'=>'user name',
+    'user password'=>'user password',
     'user phone'=>'user phone',
     'user status'=>'user status',
     'user added successfully'=>'user added successfully',
@@ -39,6 +40,7 @@ return [
     'product link'=>'product link',
     'product status'=>'product status',
     'product platform'=>'product link',
-    'product last update'=>'last update',
+    'last update'=>'last update',
+    'product last updated price'=>'last updated price',
     'product added successfully'=>'product added successfully',
 ];

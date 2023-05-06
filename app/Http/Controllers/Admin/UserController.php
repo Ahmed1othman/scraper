@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Web\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users =  User::normalUsers();
+        $users =  User::normalUsers()->get();
         return view('admin.users.index',get_defined_vars());
     }
 
@@ -32,9 +32,15 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $data = $request->only('name','email','phone','status','password');
+        $user= User::create($data);
+        if ($user)
+        {
+            $user->assignRole('normal user');
+            Session::flash('success', __('admin.user added successfully'));
+            return redirect()->route('users.index');
+        }
 
-        Session::flash('success', __('admin.user added successfully'));
-        return redirect()->route('users.index');
     }
 
     /**

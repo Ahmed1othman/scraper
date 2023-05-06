@@ -50,7 +50,7 @@
                     <a class="btn btn-primary" href="{{route('products.create')}}"><i data-feather="plus"></i> {{__('admin.add product')}}</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-responsive">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -58,7 +58,7 @@
                             <th>{{__('admin.product price')}}</th>
                             <th>{{__('admin.product link')}}</th>
                             <th>{{__('admin.product status')}}</th>
-                            <th>{{__('admin.product last price')}}</th>
+                            <th>{{__('admin.product platform')}}</th>
                             <th>{{__('admin.product last updated price')}}</th>
                             <th>{{__('admin.last update')}}</th>
                         </tr>

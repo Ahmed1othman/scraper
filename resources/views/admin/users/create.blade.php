@@ -38,14 +38,20 @@
                     @csrf
                     <div class="row">
                         <div class="mb-1 col-md-6">
-                            <label class="form-label" for="basic-default-phone">{{__('admin.user name')}}</label>
+                            <label class="form-label" for="basic-default-name">{{__('admin.user name')}}</label>
                             <input type="text" class="form-control" id="basic-default-name" name="name" placeholder="example: ali mohamed" />
                         </div>
 
                         <div class="mb-1 col-md-6">
-                            <label class="form-label" for="basic-default-name">{{__('admin.user phone')}}</label>
-                            <input type="number" maxlength="11" minlength="11" class="form-control" id="basic-default-name" name="phone" placeholder="example: 01011111111" />
+                            <label class="form-label" for="basic-default-phone">{{__('admin.user phone')}}</label>
+                            <input type="test" maxlength="11" minlength="11" class="form-control" id="basic-default-phone" name="phone" placeholder="example: 01011111111" required/>
                         </div>
+
+                        <div class="mb-1 col-md-6">
+                            <label class="form-label" for="basic-default-password">{{__('admin.user password')}}</label>
+                            <input type="text" maxlength="10" minlength="8" class="form-control" id="basic-default-password" name="password" required/>
+                        </div>
+
                         <div class="mb-1 col-md-6">
                             <label class="form-label" for="basic-default-email">{{__('admin.email')}}</label>
                             <input type="email" class="form-control" id="basic-default-email" name="email" placeholder="example: example@gmail.com" />

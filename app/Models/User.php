@@ -28,7 +28,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'phone',
         'email',
+        'status',
         'password',
         'fcm_token',
     ];
@@ -63,6 +65,14 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+
+
+
+    // attributes
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 //scope
     public function scopeNormalUsers($query)
     {

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\API\ProductRequest;
 use App\Http\Services\ProductService;
 use App\Models\Product;
-use http\Env\Response;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {

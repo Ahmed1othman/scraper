@@ -51,11 +51,11 @@ class PermissionsTableSeeder extends Seeder
 
         $user1 = User::updateOrCreate(
             ['email' => 'super@email.com'],
-            ['name' => 'super admin', 'email' => 'super@email.com','phone'=>'01011052263', 'password' => bcrypt('12345678'),'status'=>1]
+            ['name' => 'super admin', 'email' => 'super@email.com','phone'=>'01011052263', 'password' =>'12345678','status'=>1]
         );
         $user2 = User::updateOrCreate(
             ['email' => 'admin@email.com'],
-            ['name' => 'admin', 'email' => 'admin@email.com','phone'=>'01022232169', 'password' => bcrypt('12345678'),'status'=>1]
+            ['name' => 'admin', 'email' => 'admin@email.com','phone'=>'01022232169', 'password' => '12345678','status'=>1]
         );
 
         $adminRole = Role::updateOrCreate(['name' => 'Super Admin'],['name' => 'Super Admin']);
