@@ -61,7 +61,6 @@
                             <th>{{__('admin.product platform')}}</th>
                             <th>{{__('admin.product last updated price')}}</th>
                             <th>{{__('admin.last update')}}</th>
-                            <th>{{__('admin.actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -88,37 +87,7 @@
                                 </td>
                                 <td>{{$product->last_price}}</td>
                                 <td>{{$product->updated_at->diffForHumans()}}</td>
-                                <td>
-                                    <div class="d-flex">
-                                    <a href="{{ route('products.edit', $product->id) }}" style="display: inline-block" class="btn btn-primary mx-1  btn-sm  ">
-                                        <i data-feather="edit"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-danger btn-sm " style="display: inline-block"  data-bs-toggle="modal" data-bs-target="#delete-modal-{{ $product->id }}">
-                                        <i data-feather="trash-2"></i>
-                                    </button>
-                                    <!-- Delete confirmation modal -->
-                                    <div class="modal fade modal-danger text-start text-capitalize" id="delete-modal-{{ $product->id }}" tabindex="-1" aria-labelledby="delete-modal-label-{{ $product->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="delete-modal-label-{{ $product->id }}">{{__('admin.delete confirmation')}}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{__('admin.are use sure to delete this product')}}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('admin.cancel')}}</button>
-                                                        <button type="submit" class="btn btn-danger">{{__('admin.delete')}}</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div></div>
-                                </td>
+
                             </tr>
                         @endforeach
                         </tbody>

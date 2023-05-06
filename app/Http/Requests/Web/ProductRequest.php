@@ -47,8 +47,8 @@ class ProductRequest extends FormRequest
             {
                 return [
                     'price' => 'required|numeric',
-                    'platform' => 'required',
-                    'url' => 'required|url',
+//                    'platform' => 'required',
+//                    'url' => 'required|url',
                     'status' => 'required|boolean',
                 ];
             }

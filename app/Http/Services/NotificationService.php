@@ -41,7 +41,6 @@ class NotificationService
                 "product_id" => $product->id
             ]
         ];
-
         $response = Http::withHeaders([
             'Authorization' => 'key=' . $SERVER_API_KEY,
             'SenderId' => $SENDER_ID,

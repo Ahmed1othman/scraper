@@ -42,36 +42,11 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     });
 
 
-    Route::get('test/amazon',function (){
-
-    });
-    Route::get('test/noon',function (){
-        $client = new Client();
-        $url = 'https://www.noon.com/egypt-en/maybelline-lifter-lip-gloss-008-stone/N43092737A/p/?o=d802a5e2b636519a';
-        $client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
-        $crawler = $client->request('GET', $url);
-    //    print_r($crawler->filter('.priceNow')->text());
-        $price = $crawler->filter('.priceNow')->text();
-        return response()->json(['price' => $price, 'time' => now()]);
-
-    });
-//    Route::get('test/view',function (){
-//       return view('scraper') ;
-//    });
 
 
 });
 
 
-//Route::get('test/socket-send',function (){
-//    event(new App\Events\AmazonPriceNotify('Hello World'));
-//});
-
-
-
-//Route::get('test/socket-receive',function (){
-//    return view('socket');
-//});
 
 
 Route::resource('roles',RoleController::class);
@@ -85,9 +60,9 @@ Route::get('/save-token', function (Request $request) {
 Route::get('/message', function () {
 
 
-        $SERVER_API_KEY = 'AAAAIe0Crhg:APA91bH5Vf1j3Gaay-z4hNn-GKxzbbwk_QCA3khn_2ic7GUkB-7fecJjiiXaqrgQJ6XItOdGEqlsoQWYuOSJGcheJrq_3OlK4UyIROoI9JQrcyqoAQdcAMvjZJ_IP9b-MqO9BoWwY7ML';
-        $SENDER_ID = '145710296600';
-    $token_1 = 'e_CBdWH_SqWGEBGeU8akq2:APA91bF9YPqxH6zWOyU6kUFem6vMb8OqavqD_HhPbHmqixBcwy2RXuMaabtFprbKkLO-rJtlLllkzGvQGLF-K77Pia03ic7nMUtgqA7DxI5KhPwDuW93_R_P5AFf8PO3fBf2WUIld1pe';
+    $SERVER_API_KEY = 'AAAAIe0Crhg:APA91bH5Vf1j3Gaay-z4hNn-GKxzbbwk_QCA3khn_2ic7GUkB-7fecJjiiXaqrgQJ6XItOdGEqlsoQWYuOSJGcheJrq_3OlK4UyIROoI9JQrcyqoAQdcAMvjZJ_IP9b-MqO9BoWwY7ML';
+    $SENDER_ID = '145710296600';
+    $token_1 = 'cN52-YZZT1mPHgOXDOmZUy:APA91bGBE0rDomR9HYxTKr-nIwfrzaZEQDwAzB54a-tmGZIwL40rQgJg-oSdA0X4Pf52_80prWCNTEPsxRhXdW0w1fmIf__AMIhI0m7WUmlkeBqSMX16fHEL8Rs06K8bvj_EMhXWkYFB';
 
     $data = [
         "registration_ids" => [
@@ -96,17 +71,18 @@ Route::get('/message', function () {
         "notification" => [
             "title" => "New message",
             "body" => "You have a new message",
-            "android" => [
-                "notification" => [
-                    "sound" => "notification",
-                ],
-            ],
+            'channel_id' => 'x-tracker-id',
+        ],
+        "channel" =>[
+            'id' => 'x-tracker-id',
+            'name' => 'x-tracker-id',
+            'description' => 'My Channel Description',
+            'importance' => 'high'
         ],
         "data" => [
-            "product_id" => "1"
-        ]
-    ];
-
+                "product_id" => "1"
+            ]
+        ];
 
     $dataString = json_encode($data);
 

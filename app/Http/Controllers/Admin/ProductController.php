@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\ProductRequest;
 use App\Models\Product;
+use App\Models\UserProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -64,15 +65,29 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = auth()->user();
+        $product = Product::findOrFail($id);
+        $userProduct = UserProduct::where('product_id', $product->id)
+            ->where('user_id', $user->id)
+            ->first();
+        if (!$userProduct)
+            return abort(404);
+        return view('admin.products.edit',get_defined_vars());
     }
 
-    /**
+    /**````
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
+        $user = auth()->user();
+        $data = $request->only('price','status');
+        $userProduct = UserProduct::where('product_id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+        $userProduct->update($data);
+        Session::flash('success', __('admin.product updated successfully'));
+        return redirect()->route('products.edit',$id);
     }
 
     /**
@@ -80,6 +95,31 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = auth()->user();
+        $product = Product::findOrFail($id);
+        $userProduct = UserProduct::where('product_id', $product->id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($userProduct) {
+            if ($product->users->count() > 1)
+            {
+                $product->users()->detach($user->id);
+            }
+            else
+            {
+                $product->users()->detach();
+                $product->delete();
+            }
+
+            Session::flash('success', __('admin.product deleted successfully'));
+            return redirect()->route('products.index');
+        }else
+        {
+            Session::flash('error', __('admin.product deleted successfully'));
+            return redirect()->route('products.index');
+        }
+
+
     }
 }

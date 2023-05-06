@@ -4,7 +4,15 @@ return [
     'application_name' => 'اسم النظام',
     'enabled'=>'مفعل',
     'disabled'=>'معطل',
+    'cancel'=>'إالغاء',
+    'delete'=>'مسح',
+    'ok'=>'تأكيد',
+    'update'=>'تأكيد',
 
+
+    //data
+    'amazon'=>'أمازون',
+    'noon'=>'نون',
 
     //dashboard
     'dashboard'=>'لوحة التحكم',
@@ -25,9 +33,13 @@ return [
     'products'=>'المنتجات',
     'products list'=>'قائمة المنتجات',
     'add product'=>'إضافة منتج',
+    'edit product'=>'تعديل منتج',
     'product name'=>'اسم المنتج',
     'product price'=>'سعر المنتج المتوقع',
     'product link'=>'رابط المنتج',
+    'platform'=>'المتجر',
+    'delete confirmation'=>'تأكيد المسح',
+    'are use sure to delete this product'=>'هل انت متأكد من المسح؟',
     'product status'=>'الحالة',
     'product platform'=>'متجر المنتج',
     'last update'=>'اخر تحديث منذ',

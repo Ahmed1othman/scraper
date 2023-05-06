@@ -34,16 +34,16 @@
                 <h4 class="card-title">{{__('admin.add product')}}</h4>
             </div>
             <div class="card-body">
-                <form id="jquery-val-form" method="post" action="{{route('products.store')}}">
+                <form id="jquery-val-form" method="post" action="{{route('products.update')}}">
                     @csrf
                     <div class="mb-1">
                         <label class="form-label" for="basic-default-name">{{__('admin.product name')}}</label>
-                        <input type="text" class="form-control" id="basic-default-name" name="product_name" placeholder="example: headphone JPL gaming " />
+                        <input type="text" class="form-control" id="basic-default-name" name="product_name" value="{{$product->product_name}}" placeholder="example: headphone JPL gaming " />
                     </div>
 
                     <div class="mb-1">
                         <label class="form-label" for="basic-default-name">{{__('admin.product price')}}</label>
-                        <input type="number" class="form-control" id="basic-default-name" name="price" placeholder="example: 255.50 " />
+                        <input type="number" class="form-control" id="basic-default-name" name="price" value="{{$product->price}}" placeholder="example: 255.50 " />
                     </div>
 
 
@@ -63,7 +63,7 @@
 
                     <div class="mb-1">
                         <div class="form-check">
-                            <input type="checkbox" name="status" class="form-check-input" id="validationCheckBootstrap" />
+                            <input type="checkbox" name="status"  class="form-check-input" id="validationCheckBootstrap" />
                             <label class="form-check-label" for="validationCheckBootstrap">{{__('admin.product status')}}</label>
                         </div>
                     </div>
