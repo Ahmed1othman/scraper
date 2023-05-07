@@ -35,7 +35,8 @@ class NotificationService
             "notification" => [
                 "title" => $title,
                 "body" => "تم تحديث سعر المنتج :  " .$product->product_name . " ليصبح : " . $product->last_price,
-                "sound" => "notification"
+                'android_channel_id' => 'x-tracker-id',
+                'sound' => 'notification',
             ],
             "data" => [
                 "product_id" => $product->id

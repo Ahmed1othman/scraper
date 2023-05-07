@@ -62,7 +62,7 @@ Route::get('/message', function () {
 
     $SERVER_API_KEY = 'AAAAIe0Crhg:APA91bH5Vf1j3Gaay-z4hNn-GKxzbbwk_QCA3khn_2ic7GUkB-7fecJjiiXaqrgQJ6XItOdGEqlsoQWYuOSJGcheJrq_3OlK4UyIROoI9JQrcyqoAQdcAMvjZJ_IP9b-MqO9BoWwY7ML';
     $SENDER_ID = '145710296600';
-    $token_1 = 'cN52-YZZT1mPHgOXDOmZUy:APA91bGBE0rDomR9HYxTKr-nIwfrzaZEQDwAzB54a-tmGZIwL40rQgJg-oSdA0X4Pf52_80prWCNTEPsxRhXdW0w1fmIf__AMIhI0m7WUmlkeBqSMX16fHEL8Rs06K8bvj_EMhXWkYFB';
+    $token_1 = 'cNy1ELziRc6dGmONWJwMkk:APA91bEXh3XHtKyU2pdPDG2DA7RUA2oSspEftN7thJKZyZkiVb0uW-74bxHBIbmDASOvGn6Mb8gZ-jPcVzviZmExrpUE8XT6UoZI51cNbl5jpJg6pVmvxpQD_CphS99fe6GJ98va1-NC';
 
     $data = [
         "registration_ids" => [
@@ -71,14 +71,10 @@ Route::get('/message', function () {
         "notification" => [
             "title" => "New message",
             "body" => "You have a new message",
-            'channel_id' => 'x-tracker-id',
+            'android_channel_id' => 'x-tracker-id',
+            'sound' => 'notification',
         ],
-        "channel" =>[
-            'id' => 'x-tracker-id',
-            'name' => 'x-tracker-id',
-            'description' => 'My Channel Description',
-            'importance' => 'high'
-        ],
+
         "data" => [
                 "product_id" => "1"
             ]
@@ -107,8 +103,6 @@ Route::get('/message', function () {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
     $response = curl_exec($ch);
-
-//    dd($response);
 
     return $response;
 
