@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\PriceNotification;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
