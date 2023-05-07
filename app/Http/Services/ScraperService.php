@@ -13,7 +13,8 @@ class ScraperService
 {
         public function scrape(Product $product)
         {
-            try {
+//            try {
+
                 $proxy = DB::table('proxies')
                     ->inRandomOrder()
                     ->first();
@@ -52,14 +53,14 @@ class ScraperService
                 } elseif ($product->platform == 'noon') {
                     return $this->extractNoon($html);
                 }
-            } catch (TransportException $exception) {
-                if ($proxy) {
-                    DB::table('proxies')->where('id', $proxy->id)->update(['status' => 0]);
-                }
-                return $exception->getMessage();
-            }catch(Exception $ex){
-                return "general " . $ex->getMessage();
-            }
+//            } catch (TransportException $exception) {
+//                if ($proxy) {
+//                    DB::table('proxies')->where('id', $proxy->id)->update(['status' => 0]);
+//                }
+//                return $exception->getMessage();
+//            }catch(Exception $ex){
+//                return "general " . $ex->getMessage();
+//            }
         }
 
     function extractAmazon($crawler){

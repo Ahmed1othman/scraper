@@ -46,10 +46,10 @@ class ProductRequest extends FormRequest
             case 'PUT':
             {
                 return [
+                    'product_id' => 'required|exists:products,id',
                     'price' => 'required|numeric',
-                    'platform' => 'required',
-                    'url' => 'required|url',
-                    'status' => 'required|boolean',
+//                    'status' => 'required|boolean',
+
                 ];
             }
             default:

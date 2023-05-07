@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\ProductRequest;
 use App\Http\Services\ProductService;
 use App\Models\Product;
+use App\Models\UserProduct;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
@@ -23,8 +25,6 @@ class ProductController extends Controller
         $products = $this->productService->getAllProducts();
         return response()->json($products);
     }
-
-
     public function userProducts()
     {
         $products = $this->productService->getAllUserProducts();
@@ -52,6 +52,35 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'success'], 200);
     }
+    public function update(ProductRequest $request)
+    {
+        $user = auth()->user();
+         $data = $request->only('price','status');
+         $userProduct = UserProduct::where('product_id', $request->product_id)
+            ->where('user_id', $user->id)
+            ->first();
+
+
+        if (!$userProduct)
+            return response()->json(
+                [
+                    'message' => 'you have not this product',
+                    'code' => '404',
+                ],'200');
+        $result = $userProduct->update($data);
+        if ($result)
+            return response()->json(
+                [
+                    'message' => 'success',
+                    'code' => '200',
+                ],'200');
+        return response()->json(
+            [
+                'message' => 'an error',
+                'code' => '404',
+            ],'200');
+    }
+
     public function show($id)
     {
         $product = $this->productService->getProductById($id);

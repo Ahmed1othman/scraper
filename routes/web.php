@@ -209,11 +209,12 @@ Route::get('test/user',function (){
 Route::get('sendNotification',function (){
     $products = Product::all();
     foreach ($products as $product) {
-        try {
+//        try {
             dispatch(new ScrapeProduct($product));
-        }catch (\Exception $exception){
-            Log::info($exception->getMessage());
-        }
+            Log::info('doen ');
+//        }catch (\Exception $exception){
+//            Log::info($exception->getMessage());
+//        }
 
     }
 });

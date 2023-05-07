@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use function PHPUnit\Framework\isEmpty;
 
 class NotificationService
 {
@@ -18,7 +19,7 @@ class NotificationService
             $query->where('product_id', $productID)
                 ->where('price', '>', $lastPrice);
         })  ->get();
-
+        Log::info($users);
         if (!$users->isEmpty()) {
             $this->storeDatabaseNotification($product,$users);
             $this->sendRealTimeNotification($product,$users);
@@ -53,7 +54,9 @@ class NotificationService
     function storeDatabaseNotification(Product $product,$users): void
     {
         $ids = $product->pluck('id');
-        foreach ($ids as $id)
+        Log::info('ids : ' .$ids);
+        if (!isEmpty($ids))
+            foreach ($ids as $id)
         {
             $notification = new PriceNotification();
             $notification->user_id = $id;
