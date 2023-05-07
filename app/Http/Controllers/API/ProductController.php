@@ -36,11 +36,12 @@ class ProductController extends Controller
         if ($platform == null)
             return response()->json(['error' => 'Invalid URL'], 400);
 
-
         $product = Product::updateOrCreate(
             ['url' => $request->url],
+//            ['product_name' => $request->product_name, 'platform' => $platform]
             ['product_name' => $request->product_name, 'platform' => $platform]
         );
+
         $user = auth()->user();
         $user->products()
             ->syncWithoutDetaching([
@@ -80,7 +81,6 @@ class ProductController extends Controller
                 'code' => '404',
             ],'200');
     }
-
     public function show($id)
     {
         $product = $this->productService->getProductById($id);
@@ -89,6 +89,40 @@ class ProductController extends Controller
         }
         return response()->json($product);
     }
+    public function destroy(string $id)
+    {
+        $user = auth()->user();
+        $userProduct = UserProduct::where('product_id', $id)
+            ->where('user_id', $user->id)
+            ->first();
 
+        if ($userProduct) {
+            $product = Product::find($id);
+            if ($product->users->count() > 1)
+            {
+                $product->users()->detach($user->id);
+            }
+            else
+            {
+                $product->users()->detach();
+                $product->delete();
+            }
+
+            return response()->json(
+                [
+                    'message' => 'success',
+                    'code' => '200',
+                ],'200');
+        }else
+        {
+            return response()->json(
+                [
+                    'message' => 'error',
+                    'code' => '402',
+                ],'200');
+        }
+
+
+    }
 
 }

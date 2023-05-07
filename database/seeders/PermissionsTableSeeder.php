@@ -55,7 +55,7 @@ class PermissionsTableSeeder extends Seeder
         );
         $user2 = User::updateOrCreate(
             ['email' => 'admin@email.com'],
-            ['name' => 'admin', 'email' => 'admin@email.com','phone'=>'01022232169', 'password' => '12345678','status'=>1]
+            ['name' => 'Mohamed Adel', 'email' => 'admin@email.com','phone'=>'01023774267', 'password' => '12345678','status'=>1]
         );
 
         $adminRole = Role::updateOrCreate(['name' => 'Super Admin'],['name' => 'Super Admin']);

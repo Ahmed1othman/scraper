@@ -41,6 +41,7 @@
                         <span class="menu-title text-truncate" data-i18n="Dashboards">{{ __('admin.dashboard') }}</span>
                     </a>
                 </li>
+                @if(auth()->user()->hasRole('Super Admin'))
                 {{--users--}}
                 <li class="nav-item">
                     <a class="d-flex align-items-center {{ request()->routeIs('users.*') ? 'active' : '' }}" href="#">
@@ -63,6 +64,7 @@
                         </li>
                     </ul>
                 </li>
+                @endif
                 {{--products--}}
                 <li class="nav-item">
                     <a class="d-flex align-items-center {{ request()->routeIs('products.*') ? 'active' : '' }}" href="#">
