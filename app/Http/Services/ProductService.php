@@ -70,16 +70,14 @@ class ProductService
     }
     function getNoonProductDetails($url){
 //        $proxy= getProxy();
-        $client = HttpClient::create([
-//        'proxy' => sprintf('%s:%d', $proxy->ip,$proxy->port),
-        ]);
-
+        $client = HttpClient::create();
         $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
-        $response = $client->request('GET','https://www.noon.com/egypt-ar/fresh-fabric-cleaner-4l/N28892952A/p/?o=ef88374cabba23ff' , [
+        $response = $client->request('GET',$url , [
             'headers' => [
                 'User-Agent' => $userAgent,
+                'verify'=> false,
             ],
-            'timeout' => 15,
+            'timeout' => 30,
         ]);
 
 
@@ -106,9 +104,6 @@ class ProductService
     }
     function getAmazonProductDetails($url){
 //        try {
-
-        //dd($url);
-
         $proxy= getProxy();
         $client = HttpClient::create([
             'proxy' => sprintf('%s:%d', $proxy->ip,$proxy->port),
@@ -120,7 +115,7 @@ class ProductService
                 'User-Agent' => $userAgent,
                 'verify' => false
             ],
-            'timeout' => 15,
+            'timeout' => 30,
         ]);
 
         if ($response->getStatusCode() == 200){
