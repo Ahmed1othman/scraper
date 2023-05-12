@@ -298,28 +298,3 @@ Route::get('scrap-amazon-details',function (){
 
 
 
-
-
-
-Route::get('product-details',function (){
-    $url = 'https://www.amazon.eg/%D8%AD%D9%81%D8%A7%D8%B6%D8%A7%D8%AA-%D8%A8%D8%A7%D9%85%D8%A8%D8%B1%D8%B2-%D8%A8%D9%8A%D8%A8%D9%8A-%D8%AF%D8%B1%D8%A7%D9%8A-%D8%AC%D9%88%D9%86%D9%8A%D9%88%D8%B1/dp/B08WJL2TT2/ref=pd_vtp_h_pd_vtp_h_sccl_4/257-4701312-0117326?pd_rd_w=Z6D4A&content-id=amzn1.sym.efa3bf7e-14e9-4301-8677-c7873a4c7497&pf_rd_p=efa3bf7e-14e9-4301-8677-c7873a4c7497&pf_rd_r=AJ466DHTKZXBG4HD25EG&pd_rd_wg=UaM8J&pd_rd_r=fa1e645e-b61c-4c62-b9de-5fe43ffa36a5&pd_rd_i=B08WJL2TT2&psc=1';
-    $proxy = '108.62.124.39:8800';  // <-- set your proxy
-    $content = requestUrl($url, $proxy);
-    print $content;
-    print 'Done requesting '.$url.'...';
-
-
-});
-function requestUrl($url, $proxy = NULL) {
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    if ($proxy != NULL) {
-        curl_setopt($curl, CURLOPT_PROXY, $proxy);
-    }
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-    $contents = curl_exec($curl);
-    curl_close($curl);
-    return $contents;
-}
