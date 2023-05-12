@@ -210,15 +210,14 @@ Route::get('test/user',function (){
 
 Route::get('sendNotification',function (){
     $products = Product::all();
-    if ($products)
+    if ($products->count() > 0)
         foreach ($products as $product) {
             try {
                 dispatch(new ScrapeProduct($product));
-                Log::info('doen ');
+                Log::info('done');
             }catch (\Exception $exception){
                 Log::info($exception->getMessage());
             }
-
         }
 });
 
