@@ -15,10 +15,10 @@ class ScraperService
 {
     public function scrape(Product $product)
     {
-
+        $proxy = getProxy();
         $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
         if ($product->platform == 'amazon') {
-            $proxy = getProxy();
+
             $client = HttpClient::create([
                 'proxy' => sprintf('%s:%d', $proxy->ip, $proxy->port),
             ]);
@@ -36,8 +36,6 @@ class ScraperService
                 return $this->extractAmazon($html);
             }
         } elseif ($product->platform == 'noon') {
-
-            $proxy = getProxy();
             $client = HttpClient::create([
                 'proxy' => sprintf('%s:%d', $proxy->ip, $proxy->port),
             ]);
@@ -95,16 +93,16 @@ class ScraperService
 
     function extractNoon($crawler)
     {
-        try {
+//        try {
             $matches = [];
             preg_match_all('/<div class="priceNow"[^>]*>(.*?)<\/div>/s', $crawler, $matches);
             $price = preg_replace('/[^\d\.]/', '', $matches[1][0]);
             Log::info('noon' . $price);
             return $price;
-        } catch (\Exception $ex) {
-            Log::info($ex->getMessage());
-            return null;
-        }
+//        } catch (\Exception $ex) {
+//            Log::info($ex->getMessage());
+//            return null;
+//        }
 
     }
 }
