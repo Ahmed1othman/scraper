@@ -8,7 +8,9 @@ use App\Jobs\ScrapeProduct;
 use App\Models\Product;
 use App\Models\Proxy;
 use App\Models\User;
-use Goutte\Client;
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +22,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\CurlHttpClient;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 
 /*
@@ -60,8 +63,8 @@ Route::get('/save-token', function (Request $request) {
 Route::get('/message', function () {
 
 
-    $SERVER_API_KEY = 'AAAAIe0Crhg:APA91bH5Vf1j3Gaay-z4hNn-GKxzbbwk_QCA3khn_2ic7GUkB-7fecJjiiXaqrgQJ6XItOdGEqlsoQWYuOSJGcheJrq_3OlK4UyIROoI9JQrcyqoAQdcAMvjZJ_IP9b-MqO9BoWwY7ML';
-    $SENDER_ID = '145710296600';
+    $SERVER_API_KEY = env('FIREBASE_SERVER_API_KEY');
+    $SENDER_ID =env('FIREBASE_SENDER_ID');
     $token_1 = 'cNy1ELziRc6dGmONWJwMkk:APA91bEXh3XHtKyU2pdPDG2DA7RUA2oSspEftN7thJKZyZkiVb0uW-74bxHBIbmDASOvGn6Mb8gZ-jPcVzviZmExrpUE8XT6UoZI51cNbl5jpJg6pVmvxpQD_CphS99fe6GJ98va1-NC';
 
     $data = [
@@ -109,7 +112,6 @@ Route::get('/message', function () {
 }   );
 
 Route::get('/proxy',function (){
-
     $product = \App\Models\Product::find(1);
     try {
         $proxy = DB::table('proxies')
@@ -232,3 +234,92 @@ Route::get('test-array',function (){
 });
 
 
+
+Route::get('scrap-amazon-details',function (){
+
+
+//    $proxy= getProxy();
+//    $client = new GuzzleClient([
+//        'proxy' => sprintf('%s:%d', '208.100.18.73','8800'),
+//        'timeout' => 60,
+//        'verify'=>false,
+//        'headers' => [
+//            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0',
+//        ],
+//    ]);
+//
+//        $response = $client->request('GET','https://www.amazon.com/Amazon-Basics-Rechargeable-Toothbrush-Charger/dp/B08N7D5TSP/ref=d_pb_semantic_session_sims_desktop_vft_none_sccl_2_3/132-0796863-2358907?pd_rd_w=seR6P&content-id=amzn1.sym.1e1c444f-ee87-4f5a-8ebc-a5667d93ed43&pf_rd_p=1e1c444f-ee87-4f5a-8ebc-a5667d93ed43&pf_rd_r=0E28XESQTVZFRGNV4E0K&pd_rd_wg=KmTDy&pd_rd_r=a85a6c97-520b-4c38-8f71-2644e69590a9&pd_rd_i=B08N7D5TSP&psc=1');
+//        return $html = $response->getBody()->getContents();
+//        $crawler = new Crawler($html);
+//
+//        $title = $crawler->filterXPath('//h1[starts-with(@data-qa, "pdp-name-")]')->text();
+//        $price = $crawler->filter('div[data-qa="div-price-now"]')->text();
+//        $matches = [];
+//        preg_match('/[\d\.]+/', $price, $matches);
+//        $priceValue = $matches[0];
+//        return [
+//            'title'=>$title,
+//            'price'=>$priceValue,
+//        ];
+
+
+    $proxy= getProxy();
+    $client = HttpClient::create([
+        'proxy' => sprintf('%s:%d', $proxy->ip,$proxy->port),
+    ]);
+    $url = 'https://www.noon.com/egypt-en/105-dual-sim-black-4mb-2g/N11046037A/p/?o=f95ba5b02f136d8c';
+    $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0';
+    $response = $client->request('GET',$url, [
+        'headers' => [
+            'User-Agent' => $userAgent,
+            'verify' => false
+        ],
+        'timeout' => 15,
+    ]);
+     $html = $response->getContent();
+
+    if ($response->getStatusCode() == 200){
+        $html = $response->getContent();
+        $crawler = new Crawler($html);
+
+        $title = $crawler->filter('#productTitle')->text();
+        $price = $crawler->filter('.a-price-whole')->first()->text() . $crawler->filter('.a-price-fraction')->first()->text();
+
+        if ((!empty($title) || !empty($price) ))
+            return [
+                'product_name'=>$title,
+                'price'=>$price,
+            ];
+        else
+            return null;
+    }
+
+})->name('proxy');
+
+
+
+
+
+
+Route::get('product-details',function (){
+    $url = 'https://www.amazon.eg/%D8%AD%D9%81%D8%A7%D8%B6%D8%A7%D8%AA-%D8%A8%D8%A7%D9%85%D8%A8%D8%B1%D8%B2-%D8%A8%D9%8A%D8%A8%D9%8A-%D8%AF%D8%B1%D8%A7%D9%8A-%D8%AC%D9%88%D9%86%D9%8A%D9%88%D8%B1/dp/B08WJL2TT2/ref=pd_vtp_h_pd_vtp_h_sccl_4/257-4701312-0117326?pd_rd_w=Z6D4A&content-id=amzn1.sym.efa3bf7e-14e9-4301-8677-c7873a4c7497&pf_rd_p=efa3bf7e-14e9-4301-8677-c7873a4c7497&pf_rd_r=AJ466DHTKZXBG4HD25EG&pd_rd_wg=UaM8J&pd_rd_r=fa1e645e-b61c-4c62-b9de-5fe43ffa36a5&pd_rd_i=B08WJL2TT2&psc=1';
+    $proxy = '108.62.124.39:8800';  // <-- set your proxy
+    $content = requestUrl($url, $proxy);
+    print $content;
+    print 'Done requesting '.$url.'...';
+
+
+});
+function requestUrl($url, $proxy = NULL) {
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    if ($proxy != NULL) {
+        curl_setopt($curl, CURLOPT_PROXY, $proxy);
+    }
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+    $contents = curl_exec($curl);
+    curl_close($curl);
+    return $contents;
+}

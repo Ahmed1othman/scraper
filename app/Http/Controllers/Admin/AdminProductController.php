@@ -4,21 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\ProductRequest;
-use App\Http\Services\ProductService;
 use App\Models\Product;
 use App\Models\UserProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-class ProductController extends Controller
+class AdminProductController extends Controller
 {
-
-    protected $productService;
-
-    public function __construct(ProductService $productService)
-    {
-        $this->productService = $productService;
-    }
     /**
      * Display a listing of the resource.
      */
@@ -26,7 +18,6 @@ class ProductController extends Controller
     {
         $user = auth()->user();
         $products = $user->products;
-
         return view('admin.products.index',get_defined_vars());
     }
 
@@ -44,29 +35,21 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
 
-        $data = $request->only('url');
-        $response = $this->productService->storeProduct($data);
-        if ($response['code'] != 200 )
-        {
-            Session::flash('danger', __('admin.invalid data,please confirm valid data and try again'));
-            return back()->withInput();
-        }else
-        {
-            if ($response['data']){
-                $product = $response['data'];
-                $user = auth()->user();
-                $user->products()
-                    ->attach($product,[
-                        'price'=>$request->price,
-                        'status' => $request->status,
-                    ]);
-                Session::flash('success', __('admin.product added successfully'));
-                return redirect()->route('products.index');
-            }
-        }
-
-
-
+        $product = Product::firstOrCreate([
+            'url' => $request->url,
+        ], [
+            'product_name' => $request->product_name,
+            'url' => $request->url,
+            'platform' => $request->platform,
+        ]);
+        $user = auth()->user();
+        $user->products()
+            ->attach($product,[
+                'price'=>$request->price,
+                'status' => $request->status,
+            ]);
+        Session::flash('success', __('admin.product added successfully'));
+        return redirect()->route('products.index');
     }
 
     /**
@@ -137,6 +120,7 @@ class ProductController extends Controller
             Session::flash('error', __('admin.product deleted successfully'));
             return redirect()->route('products.index');
         }
+
 
     }
 }

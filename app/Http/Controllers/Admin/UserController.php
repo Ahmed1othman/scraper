@@ -57,7 +57,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('admin.users.edit',get_defined_vars());
     }
 
     /**
@@ -65,7 +66,8 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->only('name','phone','email','status');
+        return $request;
     }
 
     /**
@@ -73,6 +75,6 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
     }
 }

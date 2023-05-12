@@ -48,7 +48,7 @@
 
                     <div class="mb-1">
                         <label class="form-label" for="basic-default-name">{{__('admin.product price')}}</label>
-                        <input type="number" class="form-control" id="basic-default-name" name="price" value="{{$userProduct->price}}" placeholder="example: 255.50 " />
+                        <input type="number" class="form-control" id="basic-default-name" min="1" name="price" value="{{$userProduct->price}}" placeholder="example: 255.50 " />
                     </div>
 
                     <div class="mb-1">

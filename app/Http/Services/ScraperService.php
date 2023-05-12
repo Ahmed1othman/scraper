@@ -89,4 +89,20 @@ class ScraperService
 
     }
 
+    function getProductDetails($url){
+        $client = new Client();
+        $response = $client->request('GET', 'https://www.amazon.eg/dp/B08WJL2TT2');
+
+        $html = $response->html();
+        $crawler = new Crawler($html);
+// Extract the product title
+        $title = $crawler->filter('#productTitle')->text();
+
+// Extract the product price
+        $price = $crawler->filter('.a-price-whole')->first()->text() . '.' . $crawler->filter('.a-price-fraction')->first()->text();
+
+        echo "Title: $title\n";
+        echo "Price: $price\n";
+    }
+
 }

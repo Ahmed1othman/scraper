@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('ip');
             $table->string('port');
-            $table->string('code');
-            $table->boolean('https');
             $table->boolean('status')->default(1);
+            $table->integer('counters')->default(0);
             $table->timestamps();
         });
     }

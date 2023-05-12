@@ -1,7 +1,7 @@
 <?php
 return [
     //general
-    'application_name' => 'application name',
+    'application_name' => 'x-tracker',
     'enabled'=>'enabled',
     'disabled'=>'disabled',
     'cancel'=>'cancel',

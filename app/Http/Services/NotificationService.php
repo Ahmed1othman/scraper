@@ -30,8 +30,10 @@ class NotificationService
     {
         $tokens = $users->pluck('fcm_token');
         $title = $product->product_name . 'تنبيه تحديث في سعر المنتج : ';
-        $SERVER_API_KEY = 'AAAAIe0Crhg:APA91bH5Vf1j3Gaay-z4hNn-GKxzbbwk_QCA3khn_2ic7GUkB-7fecJjiiXaqrgQJ6XItOdGEqlsoQWYuOSJGcheJrq_3OlK4UyIROoI9JQrcyqoAQdcAMvjZJ_IP9b-MqO9BoWwY7ML';
-        $SENDER_ID = '145710296600';
+
+
+        $SERVER_API_KEY = env('FIREBASE_SERVER_API_KEY');
+        $SENDER_ID =env('FIREBASE_SENDER_ID');
         $data = [
             "registration_ids" => $tokens,
             "notification" => [
