@@ -31,7 +31,7 @@ class ScraperService
                     ]);
 
                     if ($response->getStatusCode() == 200) {
-                        Log::info('status = 200 from scrap service');
+                        Log::info('amazon => status = 200 from scrap service');
                         $html = $response->getContent();
                         return $this->extractAmazon($html);
                     }
@@ -64,16 +64,19 @@ class ScraperService
         }
 
     function extractAmazon($crawler){
-        try {
+//        try {
+
+        Log::info('from amazon scrap amazon function');
             $matches = [];
             preg_match('/<span class="a-price-whole">([0-9]+)<span class="a-price-decimal">\.<\/span><\/span><span class="a-price-fraction">([0-9]+)<\/span>/', $crawler, $matches);
             $price = $matches[1] . '.' . $matches[2];
             Log::info( 'amazon' . $price);
+        Log::info('from the end of amazon scrap');
             return $price;
-        }catch (\Exception $ex){
-            Log::info($ex->getMessage());
-            return null;
-        }
+//        }catch (\Exception $ex){
+//            Log::info($ex->getMessage());
+//            return null;
+//        }
     }
     function extractNoon($crawler){
         try {
