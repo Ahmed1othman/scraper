@@ -6,6 +6,7 @@ use Exception;
 use Goutte\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PHPUnit\Event\Telemetry\Info;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
@@ -30,6 +31,7 @@ class ScraperService
                     ]);
 
                     if ($response->getStatusCode() == 200) {
+                        Log::info('status = 200 from scrap service');
                         $html = $response->getContent();
                         return $this->extractAmazon($html);
                     }
