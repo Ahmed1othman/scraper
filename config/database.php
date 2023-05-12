@@ -83,8 +83,8 @@ return [
             'dump' => [
                 'useSingleTransaction',
                 'extended-insert',
-                'timeout' => 28800,
-                'max_allowed_packet' => 268435456,
+                'timeout' => 58800,
+                'max_allowed_packet' => 968435456,
             ],
         ],
 
