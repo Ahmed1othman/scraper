@@ -76,6 +76,16 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            // Add these lines
+            'options' => [
+                PDO::ATTR_TIMEOUT => 28800,
+            ],
+            'dump' => [
+                'useSingleTransaction',
+                'extended-insert',
+                'timeout' => 28800,
+                'max_allowed_packet' => 268435456,
+            ],
         ],
 
         'sqlsrv' => [

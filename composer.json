@@ -22,7 +22,8 @@
         "sunra/php-simple-html-dom-parser": "^1.5",
         "symfony/dom-crawler": "^6.2",
         "weidner/goutte": "^2.3",
-      "ext-dom": "*"
+      "ext-dom": "*",
+      "ext-pdo": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
