@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Http\Services\NotificationService;
 use App\Http\Services\ScraperService;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
@@ -35,7 +36,9 @@ class ScrapeProduct implements ShouldQueue
             $newPrice = floatval($price);
             $this->product->update(['last_price' => $newPrice]);
             Log::info('before notification job');
-            dispatch(new SendPriceNotificationJob($this->product));
+            $notificationService = new NotificationService();
+            $notificationService->snedPriceNotification($this->product);
+//            dispatch(new SendPriceNotificationJob($this->product));
 
         }
     }
