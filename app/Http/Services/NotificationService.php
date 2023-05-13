@@ -29,6 +29,7 @@ class NotificationService
     function sendRealTimeNotification($product,$users): void
     {
         $tokens = $users->pluck('fcm_token');
+        Log::info('tokens : ' . $tokens);
         $title = $product->product_name . 'تنبيه تحديث في سعر المنتج : ';
 
 
