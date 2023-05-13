@@ -203,9 +203,7 @@ Route::get('test/user',function (){
     $users = $product->users->filter(function($user) use ($product) {
         return $user->pivot->price >= $product->price;
     });
-
     return $users->pluck('id');;
-
 });
 
 Route::get('sendNotification',function (){
@@ -236,33 +234,6 @@ Route::get('test-array',function (){
 
 
 Route::get('scrap-amazon-details',function (){
-
-
-//    $proxy= getProxy();
-//    $client = new GuzzleClient([
-//        'proxy' => sprintf('%s:%d', '208.100.18.73','8800'),
-//        'timeout' => 60,
-//        'verify'=>false,
-//        'headers' => [
-//            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0',
-//        ],
-//    ]);
-//
-//        $response = $client->request('GET','https://www.amazon.com/Amazon-Basics-Rechargeable-Toothbrush-Charger/dp/B08N7D5TSP/ref=d_pb_semantic_session_sims_desktop_vft_none_sccl_2_3/132-0796863-2358907?pd_rd_w=seR6P&content-id=amzn1.sym.1e1c444f-ee87-4f5a-8ebc-a5667d93ed43&pf_rd_p=1e1c444f-ee87-4f5a-8ebc-a5667d93ed43&pf_rd_r=0E28XESQTVZFRGNV4E0K&pd_rd_wg=KmTDy&pd_rd_r=a85a6c97-520b-4c38-8f71-2644e69590a9&pd_rd_i=B08N7D5TSP&psc=1');
-//        return $html = $response->getBody()->getContents();
-//        $crawler = new Crawler($html);
-//
-//        $title = $crawler->filterXPath('//h1[starts-with(@data-qa, "pdp-name-")]')->text();
-//        $price = $crawler->filter('div[data-qa="div-price-now"]')->text();
-//        $matches = [];
-//        preg_match('/[\d\.]+/', $price, $matches);
-//        $priceValue = $matches[0];
-//        return [
-//            'title'=>$title,
-//            'price'=>$priceValue,
-//        ];
-
-
     $proxy= getProxy();
     $client = HttpClient::create([
         'proxy' => sprintf('%s:%d', $proxy->ip,$proxy->port),
