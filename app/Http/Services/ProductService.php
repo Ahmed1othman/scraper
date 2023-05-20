@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Product;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -13,7 +14,7 @@ class ProductService
 
     public function getAllProducts()
     {
-        return Product::all();
+        return Product::where('status',1)->all();
     }
 
     public function getAllUserProducts()
@@ -69,7 +70,6 @@ class ProductService
         }
     }
     function getNoonProductDetails($url){
-//        $proxy= getProxy();
         $client = HttpClient::create();
         $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
         $response = $client->request('GET',$url , [
@@ -82,8 +82,8 @@ class ProductService
 
 
         if ($response->getStatusCode() == 200){
+            return $html = $response->getContent();
 
-            $html = $response->getContent();
             $crawler = new Crawler($html);
 
             $title = $crawler->filterXPath('//h1[starts-with(@data-qa, "pdp-name-")]')->text();
@@ -103,35 +103,74 @@ class ProductService
 
     }
     function getAmazonProductDetails($url){
-//        try {
-        $proxy= getProxy();
-        $client = HttpClient::create([
-            'proxy' => sprintf('%s:%d', $proxy->ip,$proxy->port),
-        ]);
-
-        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
-        $response = $client->request('GET',$url, [
-            'headers' => [
-                'User-Agent' => $userAgent,
-                'verify' => false
-            ],
-            'timeout' => 30,
-        ]);
-
-        if ($response->getStatusCode() == 200){
-            $html = $response->getContent();
-            $crawler = new Crawler($html);
-
-            $title = $crawler->filter('#productTitle')->text();
-            $price = $crawler->filter('.a-price-whole')->first()->text() . $crawler->filter('.a-price-fraction')->first()->text();
-
-            if ((!empty($title) || !empty($price) ))
+        $url = $this->extractProductCodeFromUrl($url);
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])
+            ->withBasicAuth('Ahmed', 'Ahmed_2023')
+            ->post('https://realtime.oxylabs.io/v1/queries', [
+                    'source' => 'amazon_product',
+                    'domain' => 'eg',
+                    'query' => $url,
+                    'parse' => true,
+                ]
+            );
+        $responseData = $response->json();
+        $status = $response->status();
+        if ($status == 200){
+            $productDetails = $responseData['results'][0]['content'];
             return [
-                'product_name'=>$title,
-                'price'=>$price,
+                'url'=>$productDetails['url'],
+                'price'=>$productDetails['price'],
+                'stock'=>$productDetails['stock'],
+                'product_name'=>$productDetails['title']
             ];
-            else
-                return null;
+        }else{
+            return null;
         }
+
+    }
+//    function getAmazonProductDetails($url){
+////        try {
+//        $proxy= getProxy();
+//        $client = HttpClient::create([
+//            'proxy' => sprintf('%s:%d', $proxy->ip,$proxy->port),
+//        ]);
+//
+//        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
+//        $response = $client->request('GET',$url, [
+//            'headers' => [
+//                'User-Agent' => $userAgent,
+//                'verify' => false
+//            ],
+//            'timeout' => 30,
+//        ]);
+//
+//        if ($response->getStatusCode() == 200){
+//
+//            $html = $response->getContent();
+//            dump($html);
+//            $crawler = new Crawler($html);
+//
+//            $title = $crawler->filter('#productTitle')->text();
+//            $price = $crawler->filter('.a-price-whole')->first()->text() . $crawler->filter('.a-price-fraction')->first()->text();
+//
+//            if ((!empty($title) || !empty($price) ))
+//            return [
+//                'product_name'=>$title,
+//                'price'=>$price,
+//            ];
+//            else
+//                return null;
+//        }
+//    }
+
+
+
+    function extractProductCodeFromUrl($url)
+    {
+        $pattern = '/\/dp\/([A-Z0-9]+)/';
+        preg_match($pattern, $url, $matches);
+        return $matches[1] ?? null;
     }
 }

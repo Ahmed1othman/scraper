@@ -11,6 +11,7 @@ function getProxy()
     // get the next available proxy ordered by usage count
     $proxy = \App\Models\Proxy::where('status', 1)->orderBy('counters', 'ASC')->first();
 
+    \Illuminate\Support\Facades\Log::info($proxy);
     // increment the usage count of the selected proxy
     if ($proxy) {
         $proxy->counters++;
@@ -19,3 +20,18 @@ function getProxy()
 
     return $proxy;
 }
+
+function getAgent()
+{
+    static $agent = null;
+
+    if ($agent !== null) {
+        return $agent;
+    }
+
+    // get the next available proxy ordered by usage count
+    $agent = \App\Models\UserAgent::where('status', 1)->inRandomOrder()->first();
+    // increment the usage count of the selected proxy
+    return $agent;
+}
+

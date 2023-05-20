@@ -15,14 +15,17 @@ class NotificationService
     {
         $productID = $product->id;
         $lastPrice = $product->last_price;
-        $users = User::whereHas('products', function ($query) use ($productID, $lastPrice) {
-            $query->where('product_id', $productID)
-                ->where('price', '>', $lastPrice);
-        })  ->get();
-        Log::info($users);
-        if (!$users->isEmpty()) {
-            $this->storeDatabaseNotification($product,$users);
-            $this->sendRealTimeNotification($product,$users);
+        if ($lastPrice > 0) {
+            $users = User::whereHas('products', function ($query) use ($productID, $lastPrice) {
+                $query->where('product_id', $productID)
+                    ->where('price', '>', $lastPrice)
+                    ->where('status', 1);
+            })->get();
+            Log::info($users);
+            if (!$users->isEmpty()) {
+//            $this->storeDatabaseNotification($product,$users);
+                $this->sendRealTimeNotification($product, $users);
+            }
         }
     }
 

@@ -30,16 +30,6 @@ class ScrapeProduct implements ShouldQueue
     public function handle()
     {
         $scraper = new ScraperService();
-        $price = $scraper->scrape($this->product);
-
-        if ($price != null){
-            $newPrice = floatval($price);
-            $this->product->update(['last_price' => $newPrice]);
-            Log::info('before notification job');
-            $notificationService = new NotificationService();
-            $notificationService->snedPriceNotification($this->product);
-//            dispatch(new SendPriceNotificationJob($this->product));
-
-        }
+        $scraper->scrape($this->product);
     }
 }

@@ -105,7 +105,8 @@ class ProductController extends Controller
             ->first();
         $userProduct->update($data);
         Session::flash('success', __('admin.product updated successfully'));
-        return redirect()->route('products.edit',$id);
+//        return redirect()->route('products.edit',$id);
+        return redirect()->route('products.index');
     }
 
     /**
