@@ -30,12 +30,12 @@ class NotificationService
 
     function sendRealTimeNotification($product,$users): void
     {
-        $adminUsersTokens = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Super Admin');
-        })->pluck('fcm_token');
+//        $adminUsersTokens = User::whereHas('roles', function ($query) {
+//            $query->where('name', 'Super Admin');
+//        })->pluck('fcm_token');
 
         $tokens = $users->pluck('fcm_token');
-        $mergedTokens = $tokens->union($adminUsersTokens);
+//        $mergedTokens = $tokens->union($tokens);
         Log::info('tokens : ' . $tokens);
         $title = $product->product_name . 'تنبيه تحديث في سعر المنتج : ';
 
@@ -43,7 +43,7 @@ class NotificationService
         $SERVER_API_KEY = env('FIREBASE_SERVER_API_KEY');
         $SENDER_ID =env('FIREBASE_SENDER_ID');
         $data = [
-            "registration_ids" => $mergedTokens,
+            "registration_ids" => $tokens,
             "notification" => [
                 "title" => $title,
                 "body" => "تم تحديث سعر المنتج :  " .$product->product_name . " ليصبح : " . $product->last_price,
