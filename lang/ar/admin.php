@@ -8,6 +8,7 @@ return [
     'delete'=>'مسح',
     'ok'=>'تأكيد',
     'update'=>'تأكيد',
+    'actions'=>'الاجراءات',
 
 
     //data
@@ -37,7 +38,9 @@ return [
     'product name'=>'اسم المنتج',
     'product price'=>'سعر المنتج المتوقع',
     'product link'=>'رابط المنتج',
+    'product users count'=>'عدد المستخدمين علي المنتج',
     'platform'=>'المتجر',
+    'list of all products'=>'قائمة جميع المنتجات',
     'delete confirmation'=>'تأكيد المسح',
     'are use sure to delete this product'=>'هل انت متأكد من المسح؟',
     'product status'=>'الحالة',
@@ -47,10 +50,7 @@ return [
     'product added successfully'=>'تم اضافة المنتج بنجاح',
     'product updated successfully'=>'تم تعديل المنتج بنجاح',
     'product deleted successfully'=>'تم مسح المنتج بنجاح',
-
-
-
-
+    'product is already exists'=>'المنتج مضاف بالفعل',
 
 
     //users
@@ -63,5 +63,16 @@ return [
     'user status'=>'حالة العميل',
     'user added successfully'=>'تم اضافة العميل بنجاح',
 
+
+    //service configurations
+    'service_configuration'=>'إعدادات الخدمة',
+    'services list'=>'قائمة اعدادات الخدمة',
+    'add new service'=>'اضافة اعداد جديد',
+    'service username'=>'اسم المستخدم الخاص بالخدمة',
+    'service password'=>'كلمة المرور الخاصة بالخدمة',
+    'service status'=>'حالة الخدمة',
+    'add service'=>'إضافة اعداد جديد',
+    'edit service'=>'تعديل اعداد الخدمة',
+    'are use sure to delete this service'=>'هل انت متأكد من مسح هذه الخدمة؟',
 
 ];

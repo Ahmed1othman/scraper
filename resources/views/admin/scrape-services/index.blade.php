@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__('admin.products')}}
+    {{__('admin.users')}}
 @endsection
 
 @section('vendor-style-rtl')
@@ -35,7 +35,7 @@
 @endsection
 
 @section('content')
-    <h3>{{__('admin.products list')}}</h3>
+    <h3>{{__('admin.services list')}}</h3>
     <p class="mb-2">
 
     </p>
@@ -47,93 +47,71 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <a class="btn btn-primary" href="{{route('products.create')}}"><i data-feather="plus"></i> {{__('admin.add product')}}</a>
+{{--                    <a class="btn btn-primary" href="{{route('scrape-services.create')}}"><i data-feather="plus"></i> {{__('admin.add service')}}</a>--}}
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-responsive">
+                    <table class="table table-responsive" >
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>{{__('admin.product name')}}</th>
-                            <th>{{__('admin.product price')}}</th>
-                            <th>{{__('admin.product link')}}</th>
-                            <th>{{__('admin.product status')}}</th>
-                            <th>{{__('admin.product platform')}}</th>
-                            <th>{{__('admin.product last updated price')}}</th>
-                            <th>{{__('admin.last update')}}</th>
+                            <th>{{__('admin.service username')}}</th>
+                            <th>{{__('admin.service password')}}</th>
+                            <th>{{__('admin.service status')}}</th>
                             <th>{{__('admin.actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($products as $product)
-                            <tr id="row_{{$product->id}}">
+                        @foreach($scrapeServices as $scrapeService)
+                            <tr id="row_{{$scrapeService->id}}">
                                 <td>{{$loop->iteration}}</td>
-                                <td>{{$product->product_name}}</td>
-                                <td>{{$product->pivot->price}}</td>
-                                <td><a target="_blank" href="{{$product->url}}"><i data-feather="external-link"></i></a>  </td>
+                                <td>{{$scrapeService->username}}</td>
+                                <td>{{$scrapeService->password}}</td>
                                 <td>
-                                    @if($product->pivot->status)
+                                    @if($scrapeService->status)
                                         <span class="badge rounded-pill bg-success">{{__('admin.enabled')}}</span>
                                     @else
                                         <span class="badge rounded-pill bg-secondary">{{__('admin.disabled')}}</span>
                                     @endif
                                 </td>
-
-                                <td>
-                                    @if($product->platform == 'amazon')
-                                        <img style="padding: 0.25rem; height: auto; width: 80px" src="{{asset('app-assets/images/logo/amazon_logo.png')}}">
-                                    @else
-                                        <img style="padding: 0.25rem; height: auto; width: 80px" src="{{asset('app-assets/images/logo/noon_logo.png')}}">
-                                    @endif
-                                </td>
-                                <td>{{$product->last_price}}</td>
-                                <td>{{$product->updated_at->diffForHumans()}}</td>
                                 <td>
                                     <div class="d-flex">
-                                    <a href="{{ route('products.edit', $product->id) }}" style="display: inline-block" class="btn btn-primary mx-1  btn-sm  ">
-                                        <i data-feather="edit"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-danger btn-sm " style="display: inline-block"  data-bs-toggle="modal" data-bs-target="#delete-modal-{{ $product->id }}">
-                                        <i data-feather="trash-2"></i>
-                                    </button>
-                                    <!-- Delete confirmation modal -->
-                                    <div class="modal fade modal-danger text-start text-capitalize" id="delete-modal-{{ $product->id }}" tabindex="-1" aria-labelledby="delete-modal-label-{{ $product->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="delete-modal-label-{{ $product->id }}">{{__('admin.delete confirmation')}}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{__('admin.are use sure to delete this product')}}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('admin.cancel')}}</button>
-                                                        <button type="submit" class="btn btn-danger">{{__('admin.delete')}}</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div></div>
+                                        <a href="{{ route('scrape-services.edit', $scrapeService->id) }}" style="display: inline-block" class="btn btn-primary mx-1  btn-sm  ">
+                                            <i data-feather="edit"></i>
+                                        </a>
+{{--                                        <button type="button" class="btn btn-danger btn-sm " style="display: inline-block"  data-bs-toggle="modal" data-bs-target="#delete-modal-{{ $scrapeService->id }}">--}}
+{{--                                            <i data-feather="trash-2"></i>--}}
+{{--                                        </button>--}}
+                                        <!-- Delete confirmation modal -->
+{{--                                        <div class="modal fade modal-danger text-start text-capitalize" id="delete-modal-{{ $scrapeService->id }}" tabindex="-1" aria-labelledby="delete-modal-label-{{ $scrapeService->id }}" aria-hidden="true">--}}
+{{--                                            <div class="modal-dialog modal-dialog-centered">--}}
+{{--                                                <div class="modal-content">--}}
+{{--                                                    <div class="modal-header">--}}
+{{--                                                        <h5 class="modal-title" id="delete-modal-label-{{ $scrapeService->id }}">{{__('admin.delete confirmation')}}</h5>--}}
+{{--                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="modal-body">--}}
+{{--                                                        {{__('admin.are use sure to delete this service')}}--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="modal-footer">--}}
+{{--                                                        <form action="{{ route('scrape-services.destroy', $scrapeService->id) }}" method="POST">--}}
+{{--                                                            @csrf--}}
+{{--                                                            @method('DELETE')--}}
+{{--                                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('admin.cancel')}}</button>--}}
+{{--                                                            <button type="submit" class="btn btn-danger">{{__('admin.delete')}}</button>--}}
+{{--                                                        </form>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div></div>--}}
                                 </td>
                             </tr>
+
                         @endforeach
                         </tbody>
-
                     </table>
-
-                </div>
-            </div>
-            <div class="card-footer colo">
-                <div class="pagination">
-                    {{ $products->links() }}
                 </div>
             </div>
         </div>
-
     </div>
 
 

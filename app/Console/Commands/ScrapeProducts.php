@@ -28,18 +28,14 @@ class ScrapeProducts extends Command
      */
     public function handle()
     {
-
         $products = Product::all();
-
         foreach ($products as $product) {
             try {
                 dispatch(new ScrapeProduct($product));
             }catch (\Exception $exception){
                 Log::info($exception->getMessage());
             }
-
         }
-
         $this->info('All products scraped successfully!');
     }
 }

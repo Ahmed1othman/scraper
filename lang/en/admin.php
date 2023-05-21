@@ -51,6 +51,8 @@ return [
     'product name'=>'product name',
     'product price'=>'product price',
     'product link'=>'product link',
+    'product users count'=>'product users count',
+    'list of all products'=>'list of all products',
     'delete confirmation'=>'delete confirmation',
     'are use sure to delete this product'=>'are use sure to delete this product?',
     'platform'=>'platform',
@@ -61,5 +63,17 @@ return [
     'product added successfully'=>'product added successfully',
     'product updated successfully'=>'product updated successfully',
     'product deleted successfully'=>'product deleted successfully',
+    'product is already exists'=>'product is already exists',
+
+    //service configurations
+    'service_configuration'=>'service configuration',
+    'services list'=>'services list',
+    'add new service'=>'add new service',
+    'service username'=>'service username',
+    'service password'=>'service password',
+    'service status'=>'service status',
+    'add service'=>'add service',
+    'edit service'=>'edit service',
+    'are use sure to delete this service'=>'are use sure to delete this service',
 
 ];

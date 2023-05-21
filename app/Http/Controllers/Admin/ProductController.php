@@ -25,8 +25,7 @@ class ProductController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $products = $user->products;
-
+        $products = $user->products()->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.products.index',get_defined_vars());
     }
 
@@ -43,8 +42,8 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-
         $data = $request->only('url');
+
         $response = $this->productService->storeProduct($data);
         if ($response['code'] != 200 )
         {
@@ -55,11 +54,16 @@ class ProductController extends Controller
             if ($response['data']){
                 $product = $response['data'];
                 $user = auth()->user();
-                $user->products()
-                    ->attach($product,[
-                        'price'=>$request->price,
+                if ($user->products()->where('product_id', $product->id)->exists()) {
+                    Session::flash('info', __('admin.product is already exists'));
+                    return redirect()->route('products.index');
+                }
+                $user->products()->syncWithoutDetaching([
+                    $product->id => [
+                        'price' => $request->price,
                         'status' => $request->status,
-                    ]);
+                    ],
+                ]);
                 Session::flash('success', __('admin.product added successfully'));
                 return redirect()->route('products.index');
             }

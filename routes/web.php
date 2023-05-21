@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ScrapeServiceController;
 use App\Http\Controllers\Admin\UserController;
 use App\Jobs\ScrapeProduct;
 use App\Models\Product;
@@ -37,19 +39,15 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
         Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
         Route::resource('users',UserController::class);
+        Route::resource('admin-products',AdminProductController::class);
+        Route::resource('scrape-services',ScrapeServiceController::class);
         Route::resource('products',ProductController::class);
+
     });
-
-
-
-
 });
 
 
-
-
 Route::resource('roles',RoleController::class);
-
 
 Route::get('/save-token', function (Request $request) {
     auth()->user()->update(['fcm_token'=>$request->token]);
@@ -57,8 +55,6 @@ Route::get('/save-token', function (Request $request) {
 })->name('save-push-notification-token');
 
 Route::get('/message', function () {
-
-
     $SERVER_API_KEY = env('FIREBASE_SERVER_API_KEY');
     $SENDER_ID =env('FIREBASE_SENDER_ID');
     $token_1 = 'cNy1ELziRc6dGmONWJwMkk:APA91bEXh3XHtKyU2pdPDG2DA7RUA2oSspEftN7thJKZyZkiVb0uW-74bxHBIbmDASOvGn6Mb8gZ-jPcVzviZmExrpUE8XT6UoZI51cNbl5jpJg6pVmvxpQD_CphS99fe6GJ98va1-NC';
@@ -73,7 +69,6 @@ Route::get('/message', function () {
             'android_channel_id' => 'x-tracker-id',
             'sound' => 'notification',
         ],
-
         "data" => [
                 "product_id" => "1"
             ]
@@ -105,92 +100,6 @@ Route::get('/message', function () {
 
     return $response;
 
-}   );
-
-Route::get('/proxy',function (){
-    $product = \App\Models\Product::find(1);
-    try {
-        $proxy = DB::table('proxies')
-            ->inRandomOrder()
-            ->first();
-
-        if (!$proxy) {
-            // If no proxy found, scrape without proxy
-            $client = HttpClient::create();
-        } else {
-            // Create an HTTP client with the proxy
-            $client = HttpClient::create([
-                'proxy' => sprintf('http://%s:%d', $proxy->ip, $proxy->port),
-                ]);
-        }
-
-        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
-        $response = $client->request('GET', $product->url, [
-            'headers' => [
-                'User-Agent' => $userAgent,
-            ],
-        ]);
-
-        $statusCode = $response->getStatusCode();
-
-        if ($statusCode != 200) {
-            // If the status code is not 200, mark the proxy as failed
-            if ($proxy) {
-                DB::table('proxies')->where('id', $proxy->id)->update(['status' => 0]);
-            }
-            Log::info('proxy status false');
-        }
-
-        $html = $response->getContent();
-
-        return $html;
-
-        if ($product->platform == 'amazon') {
-            return $this->extractAmazon($html);
-        } elseif ($product->platform == 'noon') {
-            return $this->extractNoon($html);
-        }
-    } catch (TransportException $exception) {
-        if ($proxy) {
-            DB::table('proxies')->where('id', $proxy->id)->update(['status' => 0]);
-        }
-        return $exception->getMessage();
-    }catch(Exception $ex){
-        return "general " . $ex->getMessage();
-    }
-});
-
-Route::get('scrap-proxy',function (){
-    $client = new Client();
-
-    $url = 'https://free-proxy-list.net/';
-
-    $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
-    $crawler =  $client->request('GET', $url, [
-        'headers' => [
-            'User-Agent' => $userAgent,
-        ],
-    ]);
-
-    $rows = array();
-    $table = $crawler->filter('.table-striped tbody tr')->each(function ($row) {
-        return  array(
-            'ip' => $row->filter('td:nth-child(1)')->text(),
-            'port' => $row->filter('td:nth-child(2)')->text(),
-            'code' => $row->filter('td:nth-child(3)')->text(),
-            'https' => $row->filter('td:nth-child(7)')->text() == "yes" ? true:false,
-        );
-    });
-
-
-
-    if ($table){
-        foreach ($table as $row){
-            if ($row['https'] )
-                Proxy::create($row);
-        }
-
-    }
 });
 
 
@@ -207,10 +116,10 @@ Route::get('sendNotification',function (){
     if ($products->count() > 0)
         foreach ($products as $product) {
             //make random interval between scrapping request
-            $minDelay = '1';
-            $maxDelay = '30';
-            $delay = rand($minDelay, $maxDelay);
-            sleep($delay);
+//            $minDelay = '1';
+//            $maxDelay = '30';
+//            $delay = rand($minDelay, $maxDelay);
+//            sleep($delay);
             try {
                 dispatch(new ScrapeProduct($product));
                 Log::info('done');

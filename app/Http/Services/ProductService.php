@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Product;
 
+use App\Models\ScrapeService;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\DomCrawler\Crawler;
@@ -32,12 +33,21 @@ class ProductService
 
 
     public function storeProduct($data){
+
         $platform = $this->getProductVendor($data['url']);
         if ($platform!=null){
             $result = [];
             if ($platform == 'noon'){
                  $result = $this->getNoonProductDetails($data['url']);
             }elseif ($platform=='amazon'){
+                $newProductCode = $this->extractAmazonProductCodeFromUrl($data['url']);
+                $existProduct = Product::where('url', 'like', '%' . $newProductCode . '%')->first();
+                if ($existProduct){
+                    return [
+                        'code'=> 200,
+                        'data'=>$existProduct,
+                    ];
+                }
                  $result = $this->getAmazonProductDetails($data['url']);
             }
 
@@ -103,11 +113,14 @@ class ProductService
 
     }
     function getAmazonProductDetails($url){
-        $url = $this->extractProductCodeFromUrl($url);
+        $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+        if (!$scrapServiceConfiguration)
+            return null;
+        $url = $this->extractAmazonProductCodeFromUrl($url);
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])
-            ->withBasicAuth('Ahmed', 'Ahmed_2023')
+            ->withBasicAuth($scrapServiceConfiguration->username, $scrapServiceConfiguration->password)
             ->post('https://realtime.oxylabs.io/v1/queries', [
                     'source' => 'amazon_product',
                     'domain' => 'eg',
@@ -167,7 +180,7 @@ class ProductService
 
 
 
-    function extractProductCodeFromUrl($url)
+    function extractAmazonProductCodeFromUrl($url)
     {
         $pattern = '/\/dp\/([A-Z0-9]+)/';
         preg_match($pattern, $url, $matches);

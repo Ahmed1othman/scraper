@@ -2,7 +2,7 @@
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
-                <li class="nav-item me-auto"><a class="navbar-brand" href="{{route('dashboard')}}"><span class="brand-logo">
+{{--                <li class="nav-item me-auto"><a class="navbar-brand" href="{{route('dashboard')}}"><span class="brand-logo">--}}
                             <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                                 <defs>
                                     <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%" y2="89.4879456%">
@@ -26,7 +26,7 @@
                                     </g>
                                 </g>
                             </svg></span>
-                        <h2 class="brand-text">{{__('admin.application_name')}}</h2>
+{{--                        <h2 class="brand-text">{{__('admin.application_name')}}</h2>--}}
                     </a></li>
                 <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i></a></li>
             </ul>
@@ -64,7 +64,47 @@
                         </li>
                     </ul>
                 </li>
+                {{--admin-products--}}
+                <li class="nav-item">
+                    <a class="d-flex align-items-center {{ request()->routeIs('admin_products.*') ? 'active' : '' }}" href="#">
+                        <i data-feather='shopping-cart'></i>
+                        <span class="menu-title text-truncate" data-i18n="Dashboards">{{ __('admin.products') }}</span>
+                        <span class="badge badge-light-success rounded-pill ms-auto me-1">{{\App\Models\Product::get()->count()}}</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('admin-products.index') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('admin-products.index') }}">
+                                <i data-feather="circle"></i>
+                                <span class="menu-item text-truncate" data-i18n="Analytics">{{ __('admin.products list') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{--scrape services--}}
+                <li class="nav-item">
+                    <a class="d-flex align-items-center {{ request()->routeIs('scrape-services.*') ? 'active' : '' }}" href="#">
+                        <i data-feather="cpu"></i>
+                        <span class="menu-title text-truncate" data-i18n="Dashboards">{{ __('admin.service_configuration') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('scrape-services.index') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('scrape-services.index') }}">
+                                <i data-feather="circle"></i>
+                                <span class="menu-item text-truncate" data-i18n="Analytics">{{ __('admin.services list') }}</span>
+                            </a>
+                        </li>
+{{--                        <li class="{{ request()->routeIs('scrape-services.create') ? 'active' : '' }}">--}}
+{{--                            <a class="d-flex align-items-center" href="{{ route('scrape-services.create') }}">--}}
+{{--                                <i data-feather="circle"></i>--}}
+{{--                                <span class="menu-item text-truncate" data-i18n="eCommerce">{{ __('admin.add new service') }}</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+                    </ul>
+                </li>
+
                 @endif
+                @if(auth()->user()->hasRole('normal user'))
                 {{--products--}}
                 <li class="nav-item">
                     <a class="d-flex align-items-center {{ request()->routeIs('products.*') ? 'active' : '' }}" href="#">
@@ -87,7 +127,7 @@
                         </li>
                     </ul>
                 </li>
-
+                @endif
             </ul>
         </div>
     </div>
