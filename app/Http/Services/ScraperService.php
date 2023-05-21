@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 use App\Models\Product;
+use App\Models\ScrapeService;
 use Exception;
 use Goutte\Client;
 use Illuminate\Support\Facades\DB;
@@ -18,12 +19,14 @@ class ScraperService
     {
 
         if ($product->platform == 'amazon') {
-
+            $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+            if (!$scrapServiceConfiguration)
+                return null;
             $url = $this->extractProductCodeFromUrl($product->url);
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])
-                ->withBasicAuth('Ahmed', 'Ahmed_2023')
+                ->withBasicAuth($scrapServiceConfiguration->username, $scrapServiceConfiguration->password)
                 ->post('https://realtime.oxylabs.io/v1/queries', [
                         'source' => 'amazon_product',
                         'domain' => 'eg',

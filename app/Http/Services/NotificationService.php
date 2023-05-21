@@ -59,6 +59,8 @@ class NotificationService
             'SenderId' => $SENDER_ID,
             'Content-Type' => 'application/json',
         ])->post('https://fcm.googleapis.com/fcm/send', $data);
+
+        Log::info($response);
     }
 
     function storeDatabaseNotification(Product $product,$users): void
@@ -74,6 +76,5 @@ class NotificationService
             $notification->message = "new price alert for product " .$product->name . "is: " . $product->last_price;
             $notification->save();
         }
-
     }
 }

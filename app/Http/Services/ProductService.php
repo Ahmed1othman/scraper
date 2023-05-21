@@ -90,7 +90,6 @@ class ProductService
             'timeout' => 30,
         ]);
 
-
         if ($response->getStatusCode() == 200){
             return $html = $response->getContent();
 
@@ -141,7 +140,6 @@ class ProductService
         }else{
             return null;
         }
-
     }
 //    function getAmazonProductDetails($url){
 ////        try {
