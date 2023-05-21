@@ -43,7 +43,6 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $data = $request->only('url');
-
         $response = $this->productService->storeProduct($data);
         if ($response['code'] != 200 )
         {
