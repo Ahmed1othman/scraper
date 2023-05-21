@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PermissionsTableSeeder::class,
-            ProxyServersTableSeeder::class,
+//            ProxyServersTableSeeder::class,
+            ServiceConfigurationTableSeeder::class,
         ]);
     }
 }
