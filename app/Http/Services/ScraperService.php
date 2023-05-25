@@ -18,6 +18,7 @@ class ScraperService
     public function scrape(Product $product)
     {
 
+        Log::info('inside scrap product number: ' . $product->id);
         if ($product->platform == 'amazon') {
             $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
             if (!$scrapServiceConfiguration)

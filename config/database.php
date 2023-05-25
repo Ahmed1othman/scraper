@@ -60,6 +60,9 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_TIMEOUT => 180,
+                PDO::ATTR_PERSISTENT => true,
+
             ]) : [],
         ],
 
@@ -83,7 +86,7 @@ return [
             'dump' => [
                 'useSingleTransaction',
                 'extended-insert',
-                'timeout' => 58800,
+                'timeout' => 68800,
                 'max_allowed_packet' => 968435456,
             ],
         ],

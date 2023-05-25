@@ -70,9 +70,9 @@ Route::get('/message', function () {
             'sound' => 'notification',
         ],
         "data" => [
-                "product_id" => "1"
-            ]
-        ];
+            "product_id" => "1"
+        ]
+    ];
 
     $dataString = json_encode($data);
 
@@ -112,14 +112,9 @@ Route::get('test/user',function (){
 });
 
 Route::get('sendNotification',function (){
-    $products = Product::all();
-    if ($products->count() > 0)
+    $products = Product::orderBy('updated_at','ASC')->get();
+    if ($products->count() > 0){
         foreach ($products as $product) {
-            //make random interval between scrapping request
-//            $minDelay = '1';
-//            $maxDelay = '30';
-//            $delay = rand($minDelay, $maxDelay);
-//            sleep($delay);
             try {
                 dispatch(new ScrapeProduct($product));
                 Log::info('done');
@@ -127,7 +122,43 @@ Route::get('sendNotification',function (){
                 Log::info($exception->getMessage());
             }
         }
+    }
+
+
+
+
+
+
+
+    // try {
+    //     // Determine the queue name based on the index
+    //     $queueName = $queueNames[$index % count($queueNames)];
+
+    //     // Dispatch the job to the specified queue
+    //     Queue::pushOn($queueName, new ScrapeProduct($product));
+
+    //     Log::info('Job dispatched for product ID: ' . $product->id . ' to queue: ' . $queueName);
+    // } catch (\Exception $exception) {
+    //     Log::info($exception->getMessage());
+    // }
+
 });
+//     $products = Product::all();
+//     if ($products->count() > 0)
+//         foreach ($products as $product) {
+//             //make random interval between scrapping request
+// //            $minDelay = '1';
+// //            $maxDelay = '30';
+// //            $delay = rand($minDelay, $maxDelay);
+// //            sleep($delay);
+//             try {
+//                 dispatch(new ScrapeProduct($product));
+//                 Log::info('done');
+//             }catch (\Exception $exception){
+//                 Log::info($exception->getMessage());
+//             }
+//         }
+// });
 
 Route::get('test-array',function (){
     $product = Product::find(1);
@@ -176,7 +207,7 @@ Route::get('scrap-amazon-details',function (){
         'Content-Type' => 'application/json',
     ])
         ->withBasicAuth('Ahmed', 'Ahmed_2023')
-            ->post('https://realtime.oxylabs.io/v1/queries', [
+        ->post('https://realtime.oxylabs.io/v1/queries', [
                 'source' => 'amazon_product',
                 'domain' => 'eg',
                 'query' => 'B08WJL2TT2',
@@ -189,13 +220,13 @@ Route::get('scrap-amazon-details',function (){
     $status = $response->status();
 
 //return $responseData->;
-     $productDetails = $responseData['results'][0]['content'];
-return [
-    'url'=>$productDetails['url'],
-    'price'=>$productDetails['price'],
-    'stock'=>$productDetails['stock'],
-    'title'=>$productDetails['url']
-];
+    $productDetails = $responseData['results'][0]['content'];
+    return [
+        'url'=>$productDetails['url'],
+        'price'=>$productDetails['price'],
+        'stock'=>$productDetails['stock'],
+        'title'=>$productDetails['url']
+    ];
 
 
 
@@ -262,7 +293,7 @@ return [
 
 
 //    $crawler = $goutteClient->request('GET', $url,['proxy'=>''.$proxy->ip .':'. $proxy->port.'']);
-        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0';
+    $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0';
 
     $crawler = $goutteClient->request('GET', $url,['User-Agent'=>$userAgent]);
 //    $delay = rand($minDelay, $maxDelay);

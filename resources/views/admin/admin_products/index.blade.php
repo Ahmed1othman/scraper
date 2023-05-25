@@ -125,12 +125,15 @@
                     </table>
 
                 </div>
-            </div>
-            <div class="card-footer colo">
-                <div class="pagination">
-                    {{ $products->links() }}
+                <div class="card-footer colo align-content-center">
+                    <div class="d-flex align-self-center mx-0 row m-2 ">
+                        <div class="pagination">
+                            {{ $products->links() }}
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
 
     </div>

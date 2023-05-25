@@ -31,7 +31,10 @@ class ScrapeProducts extends Command
         $products = Product::all();
         foreach ($products as $product) {
             try {
+                Log::info('before scrap product number: ' . $product->id);
                 dispatch(new ScrapeProduct($product));
+                Log::info('after scrap product number: ' . $product->id);
+
             }catch (\Exception $exception){
                 Log::info($exception->getMessage());
             }
