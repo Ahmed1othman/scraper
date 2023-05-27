@@ -11,7 +11,6 @@ function getProxy()
     // get the next available proxy ordered by usage count
     $proxy = \App\Models\Proxy::where('status', 1)->orderBy('counters', 'ASC')->first();
 
-    \Illuminate\Support\Facades\Log::info($proxy);
     // increment the usage count of the selected proxy
     if ($proxy) {
         $proxy->counters++;

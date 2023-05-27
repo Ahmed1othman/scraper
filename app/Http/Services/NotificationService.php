@@ -66,7 +66,6 @@ class NotificationService
     function storeDatabaseNotification(Product $product,$users): void
     {
         $ids = $product->pluck('id');
-        Log::info('ids : ' .$ids);
         if (!isEmpty($ids))
         foreach ($ids as $id)
             {
