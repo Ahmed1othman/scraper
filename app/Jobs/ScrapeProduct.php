@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Http\Services\NotificationService;
 use App\Http\Services\ScraperService;
 use App\Models\Product;
+use App\Models\ScrapeService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,7 +30,11 @@ class ScrapeProduct implements ShouldQueue
 
     public function handle()
     {
-        $scraper = new ScraperService();
-        $scraper->scrape($this->product);
+        $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+        if (!$scrapServiceConfiguration){
+            $scraper = new ScraperService();
+            $scraper->scrape($this->product);
+        }
+
     }
 }

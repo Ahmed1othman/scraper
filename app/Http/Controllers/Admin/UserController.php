@@ -66,8 +66,11 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->only('name','phone','email','status');
-        return $request;
+        $data = $request->only('name','phone','email','status');
+        $user = User::findOrFail($id);
+        $user->update($data);
+        $user->save();
+        return view('admin.users.index');
     }
 
     /**
