@@ -60,7 +60,7 @@ class NotificationService
             'Content-Type' => 'application/json',
         ])->post('https://fcm.googleapis.com/fcm/send', $data);
 
-        Log::info($response);
+        Log::info("notification log" . $response);
     }
 
     function storeDatabaseNotification(Product $product,$users): void
