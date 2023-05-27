@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\ScrapeProduct;
 use App\Models\Product;
+use App\Models\ScrapeService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -28,17 +29,21 @@ class ScrapeProducts extends Command
      */
     public function handle()
     {
-        $products = Product::all();
-        foreach ($products as $product) {
-            try {
-                Log::info('before scrap product number: ' . $product->id);
-                dispatch(new ScrapeProduct($product));
-                Log::info('after scrap product number: ' . $product->id);
+        $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+        if ($scrapServiceConfiguration) {
+            $products = Product::all();
+            foreach ($products as $product) {
+                try {
+                    Log::info('before scrap product number: ' . $product->id);
+                    dispatch(new ScrapeProduct($product));
+                    Log::info('after scrap product number: ' . $product->id);
 
-            }catch (\Exception $exception){
-                Log::info($exception->getMessage());
+                } catch (\Exception $exception) {
+                    Log::info($exception->getMessage());
+                }
             }
+            $this->info('All products scraped successfully!');
         }
-        $this->info('All products scraped successfully!');
+        $this->info('services is disabled');
     }
 }
