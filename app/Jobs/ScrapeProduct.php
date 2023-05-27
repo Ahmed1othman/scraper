@@ -31,7 +31,7 @@ class ScrapeProduct implements ShouldQueue
     public function handle()
     {
         $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
-        if (!$scrapServiceConfiguration){
+        if ($scrapServiceConfiguration){
             $scraper = new ScraperService();
             $scraper->scrape($this->product);
         }
