@@ -31,28 +31,31 @@ class ProductController extends Controller
         return response()->json($products);
     }
     public function store(ProductRequest $request){
+        $data = $request->only('url');
+        $response = $this->productService->storeProduct($data);
+        if ($response['code'] != 200 )
+        {
+            return response()->json(['message' => 'admin.invalid data,please confirm valid data and try again'], 400);
+        }else
+        {
+            if ($response['data']){
+                $product = $response['data'];
+                $user = auth()->user();
+                if ($user->products()->where('product_id', $product->id)->exists()) {
+                    return response()->json(['message' => 'admin.product is already exists'], 200);
+                }
+                $user->products()->syncWithoutDetaching([
+                    $product->id => [
+                        'price' => $request->price,
+                        'status' => $request->status,
+                    ],
+                ]);
+                return response()->json(['message' => 'success'], 200);
+            }
+        }
 
-        $platform = $this->productService->getProductVendor($request->url);
-        if ($platform == null)
-            return response()->json(['error' => 'Invalid URL'], 400);
-
-        $product = Product::updateOrCreate(
-            ['url' => $request->url],
-//            ['product_name' => $request->product_name, 'platform' => $platform]
-            ['product_name' => $request->product_name, 'platform' => $platform]
-        );
-
-        $user = auth()->user();
-        $user->products()
-            ->syncWithoutDetaching([
-                $product->id => [
-                    'price' => $request->price,
-                    'status' => $request->status,
-                ]
-            ]);
-
-        return response()->json(['message' => 'success'], 200);
     }
+
     public function update(ProductRequest $request)
     {
         $user = auth()->user();
