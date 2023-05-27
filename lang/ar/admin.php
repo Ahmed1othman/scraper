@@ -62,7 +62,8 @@ return [
     'user phone'=>'رقم الموبايل',
     'user status'=>'حالة العميل',
     'user added successfully'=>'تم اضافة العميل بنجاح',
-
+    'new password'=>'كلمة المرور الجديدة : ',
+    'change password'=>'تغيير كلمة المرور ',
 
     //service configurations
     'service_configuration'=>'إعدادات الخدمة',

@@ -75,6 +75,9 @@
                                 </td>
                                 <td>
                                     <div class="d-flex">
+                                        @include('admin.users.resetpasword')
+
+
                                         <a href="{{ route('users.edit', $user->id) }}" style="display: inline-block" class="btn btn-primary mx-1  btn-sm  ">
                                             <i data-feather="edit"></i>
                                         </a>
@@ -100,12 +103,13 @@
                                                             <button type="submit" class="btn btn-danger">{{__('admin.delete')}}</button>
                                                         </form>
                                                     </div>
+
+
                                                 </div>
                                             </div>
                                         </div></div>
                                 </td>
                             </tr>
-
                         @endforeach
                         </tbody>
                     </table>

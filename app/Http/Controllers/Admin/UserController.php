@@ -64,13 +64,14 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
         $data = $request->only('name','phone','email','status');
         $user = User::findOrFail($id);
         $user->update($data);
         $user->save();
-        return view('admin.users.index');
+        Session::flash('success', __('admin.user updated successfully'));
+        return redirect()->route('users.index');
     }
 
     /**
@@ -78,6 +79,13 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        $user = User::findOrFail($id);
+        $user->delete();
+        Session::flash('success', __('admin.user deleted successfully'));
+        return redirect()->route('users.index');
+    }
+
+    public function changePassword(Request $request){
 
     }
 }

@@ -72,7 +72,6 @@ class ScrapeServiceController extends Controller
             $product = Product::findOrFail($id);
             $product->delete();
         }
-
         Session::flash('error', __('admin.product deleted successfully'));
         return redirect()->route('scrape-services.index');
     }

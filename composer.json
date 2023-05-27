@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.11",
         "mcamara/laravel-localization": "^1.8",
+        "opcodesio/log-viewer": "^2.4",
         "pusher/pusher-php-server": "^7.2",
         "roach-php/core": "^2.0",
         "roach-php/laravel": "^2.0",

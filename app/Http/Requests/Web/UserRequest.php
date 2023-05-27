@@ -46,7 +46,7 @@ class UserRequest extends FormRequest
             {
                 return [
                     'name' => 'required',
-                    'phone' => 'required|numeric|digits:11|unique:users,phone',
+                    'phone' => 'required|numeric|digits:11|unique:users,phone,'.$this->id,
                     'email' => 'nullable|email|sometimes',
                     'status' => 'required|boolean'
                 ];

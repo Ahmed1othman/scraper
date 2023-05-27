@@ -37,6 +37,8 @@
                 <form id="jquery-val-form" method="post" action="{{route('users.update',$user->id)}}">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" class="form-control" value="{{$user->id}}" id="basic-default-id" name="id" />
+
                     <div class="row">
                         <div class="mb-1 col-md-6">
                             <label class="form-label" for="basic-default-name">{{__('admin.user name')}}</label>

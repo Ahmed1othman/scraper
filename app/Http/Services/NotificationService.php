@@ -68,13 +68,13 @@ class NotificationService
         $ids = $product->pluck('id');
         Log::info('ids : ' .$ids);
         if (!isEmpty($ids))
-            foreach ($ids as $id)
-        {
-            $notification = new PriceNotification();
-            $notification->user_id = $id;
-            $notification->product_id = $product->id;
-            $notification->message = "new price alert for product " .$product->name . "is: " . $product->last_price;
-            $notification->save();
-        }
+        foreach ($ids as $id)
+            {
+                $notification = new PriceNotification();
+                $notification->user_id = $id;
+                $notification->product_id = $product->id;
+                $notification->message = "new price alert for product " .$product->name . "is: " . $product->last_price;
+                $notification->save();
+            }
     }
 }

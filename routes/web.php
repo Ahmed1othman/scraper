@@ -39,6 +39,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
         Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
         Route::resource('users',UserController::class);
+        Route::post('users.change-password',[UserController::class,'changePassword'])->name('users.change.password');
         Route::resource('admin-products',AdminProductController::class);
         Route::resource('scrape-services',ScrapeServiceController::class);
         Route::resource('products',ProductController::class);
