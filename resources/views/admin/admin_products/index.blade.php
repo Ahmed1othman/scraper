@@ -54,6 +54,7 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>{{__('admin.product ID')}}</th>
                             <th>{{__('admin.product name')}}</th>
                             <th>{{__('admin.product link')}}</th>
                             <th>{{__('admin.product users count')}}</th>
@@ -67,15 +68,9 @@
                         @foreach($products as $product)
                             <tr id="row_{{$product->id}}">
                                 <td>{{$loop->iteration}}</td>
+                                <td>{{$product->id}}</td>
                                 <td>{{$product->product_name}}</td>
                                 <td><a target="_blank" href="{{$product->url}}"><i data-feather="external-link"></i></a>  </td>
-{{--                                <td>--}}
-{{--                                    @if($product->pivot->status)--}}
-{{--                                        <span class="badge rounded-pill bg-success">{{__('admin.enabled')}}</span>--}}
-{{--                                    @else--}}
-{{--                                        <span class="badge rounded-pill bg-secondary">{{__('admin.disabled')}}</span>--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
                                 <td>{{$product->users_count}}</td>
                                 <td>
                                     @if($product->platform == 'amazon')
@@ -84,19 +79,15 @@
                                         <img style="padding: 0.25rem; height: auto; width: 80px" src="{{asset('app-assets/images/logo/noon_logo.png')}}">
                                     @endif
                                 </td>
-
                                 <td>{{$product->last_price}}</td>
                                 <td>{{$product->updated_at->diffForHumans()}}</td>
                                 <td>
                                     <div class="d-flex">
-                                    <a href="{{ route('admin-products.edit', $product->id) }}" style="display: inline-block" class="btn btn-primary mx-1  btn-sm  ">
-                                        <i data-feather="edit"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-danger btn-sm " style="display: inline-block"  data-bs-toggle="modal" data-bs-target="#delete-modal-{{ $product->id }}">
-                                        <i data-feather="trash-2"></i>
-                                    </button>
-                                    <!-- Delete confirmation modal -->
-                                    <div class="modal fade modal-danger text-start text-capitalize" id="delete-modal-{{ $product->id }}" tabindex="-1" aria-labelledby="delete-modal-label-{{ $product->id }}" aria-hidden="true">
+                                        <button type="button" class="btn btn-danger btn-sm " style="display: inline-block"  data-bs-toggle="modal" data-bs-target="#delete-modal-{{ $product->id }}">
+                                            <i data-feather="trash-2"></i>
+                                        </button>
+                                        <!-- Delete confirmation modal -->
+                                        <div class="modal fade modal-danger text-start text-capitalize" id="delete-modal-{{ $product->id }}" tabindex="-1" aria-labelledby="delete-modal-label-{{ $product->id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -116,7 +107,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div></div>
+                                    </div>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

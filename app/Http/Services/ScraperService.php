@@ -49,7 +49,7 @@ class ScraperService
                 ]);
                 $product->save();
                 $notificationService = new NotificationService();
-                $notificationService->snedPriceNotification($product);
+                $notificationService->sendPriceNotification($product);
             }else{
                 return null;
             }

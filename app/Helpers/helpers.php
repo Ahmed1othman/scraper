@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 function getProxy()
 {
     static $proxy = null;
@@ -20,6 +22,8 @@ function getProxy()
     return $proxy;
 }
 
+
+
 function getAgent()
 {
     static $agent = null;
@@ -34,3 +38,8 @@ function getAgent()
     return $agent;
 }
 
+
+
+function checkSubscription(User $user){
+
+}

@@ -22,7 +22,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = $this->productService->getAllProducts();
+        $products = $this->productService->getAllProducts()->orderBy('updated_at', 'desc');
         return response()->json($products);
     }
     public function userProducts()
@@ -31,6 +31,14 @@ class ProductController extends Controller
         return response()->json($products);
     }
     public function store(ProductRequest $request){
+        $user = auth()->user();
+        if ($user->subscription_status){
+            return response()->json(['message' => __('admin.year subscription is expired, contact admins to renew')], 410);
+        }
+        if ($user->remainingProducts()<= 0){
+            return response()->json(['message' => __('admin.you reach the maximum number of products for your subscription')], 409);
+        }
+
         $data = $request->only('url');
         $response = $this->productService->storeProduct($data);
         if ($response['code'] != 200 )
@@ -59,11 +67,16 @@ class ProductController extends Controller
     public function update(ProductRequest $request)
     {
         $user = auth()->user();
+        if ($user->subscription_status){
+            return response()->json(['message' => __('admin.year subscription is expired, contact admins to renew')], 410);
+        }
+        if ($user->remainingProducts()<= 0){
+            return response()->json(['message' => __('admin.you reach the maximum number of products for your subscription')], 409);
+        }
          $data = $request->only('price','status');
          $userProduct = UserProduct::where('product_id', $request->product_id)
             ->where('user_id', $user->id)
             ->first();
-
 
         if (!$userProduct)
             return response()->json(

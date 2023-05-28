@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\UserRequest;
+use App\Http\Requests\Web\WebChangePasswordRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -66,7 +67,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, string $id)
     {
-        $data = $request->only('name','phone','email','status');
+        $data = $request->only('name','phone','email','status','number_of_products','subscription_expiration_date','subscription_status');
         $user = User::findOrFail($id);
         $user->update($data);
         $user->save();
@@ -85,7 +86,16 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function changePassword(Request $request){
+    public function changePassword(WebChangePasswordRequest $request){
+        $user = User::findOrFail($request->id);
+        $user->update(['password' => $request->password]);
+        if ($user->save()){
+            Session::flash('success', __('admin.user password changed successfully'));
+            return redirect()->route('users.index');
+        }else{
+            Session::flash('danger', __('admin.not updated'));
+            return redirect()->route('users.index');
+        }
 
     }
 }

@@ -37,6 +37,9 @@ use Symfony\Component\HttpClient\HttpClient;
 
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+        Route::get('/',function (){
+            return redirect()->route('dashboard');
+        });
         Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
         Route::resource('users',UserController::class);
         Route::post('users.change-password',[UserController::class,'changePassword'])->name('users.change.password');

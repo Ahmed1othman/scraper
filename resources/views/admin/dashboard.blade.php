@@ -5,11 +5,11 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-lg-3 col-sm-6 col-12">
+        <div class="col-lg-6 col-md-12">
             <div class="card">
                 <div class="card-header">
                     <div>
-                        <h2 class="fw-bolder mb-0">25</h2>
+                        <h2 class="fw-bolder mb-0">{{\App\Models\Product::productsCount()}}</h2>
                         <p class="card-text">عدد المنتجات المضافة</p>
                     </div>
                     <div class="avatar bg-light-primary p-50 m-0">
@@ -20,11 +20,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-6 col-12">
+        @if(auth()->user()->hasRole('Super Admin'))
+            <div class="col-lg-6 col-md-12">
             <div class="card">
                 <div class="card-header">
                     <div>
-                        <h2 class="fw-bolder mb-0">10</h2>
+                        <h2 class="fw-bolder mb-0">{{\App\Models\User::usersCount()}}</h2>
                         <p class="card-text">إجمالي العملاء</p>
                     </div>
                     <div class="avatar bg-light-success p-50 m-0">
@@ -35,6 +36,7 @@
                 </div>
             </div>
         </div>
+        @endif
 {{--        <div class="col-lg-3 col-sm-6 col-12">--}}
 {{--            <div class="card">--}}
 {{--                <div class="card-header">--}}

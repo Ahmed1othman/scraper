@@ -25,7 +25,7 @@ class ProductController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $products = $user->products()->orderBy('created_at', 'desc')->paginate(10);
+        $products = $user->products()->orderBy('updated_at', 'desc')->paginate(10);
         return view('admin.products.index',get_defined_vars());
     }
 
@@ -42,6 +42,16 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        $user = auth()->user();
+        if ($user->subscription_status){
+            Session::flash('danger', __('admin.year subscription is expired, contact admins to renew'));
+            return back()->withInput();
+        }
+        if ($user->remainingProducts()<= 0){
+            Session::flash('danger', __('admin.you reach the maximum number of products for your subscription'));
+            return back()->withInput();
+        }
+
         $data = $request->only('url');
         $response = $this->productService->storeProduct($data);
         if ($response['code'] != 200 )
@@ -102,6 +112,14 @@ class ProductController extends Controller
     public function update(ProductRequest $request, string $id)
     {
         $user = auth()->user();
+        if ($user->subscription_status){
+            Session::flash('danger', __('admin.year subscription is expired, contact admins to renew'));
+            return back()->withInput();
+        }
+        if ($user->remainingProducts()<= 0){
+            Session::flash('danger', __('admin.you reach the maximum number of products for your subscription'));
+            return back()->withInput();
+        }
         $data = $request->only('price','status');
         $userProduct = UserProduct::where('product_id', $id)
             ->where('user_id', $user->id)

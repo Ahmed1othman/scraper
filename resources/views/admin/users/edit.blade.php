@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css-rtl/core/menu/menu-types/vertical-menu.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css-rtl/plugins/forms/form-validation.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css-rtl/plugins/forms/pickers/form-flat-pickr.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('app-assets/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css')}}">
 @endsection
 @section('vendor-style-ltr')
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/vendors/css/vendors.min.css')}}">
@@ -61,8 +62,27 @@
                                 <label class="form-check-label" for="validationCheckBootstrap">{{__('admin.user status')}}</label>
                             </div>
                         </div>
-                    </div>
+                        <div class="divider divider-primary">
+                            <div class="divider-text">{{__('admin.subscription details')}}</div>
+                        </div>
 
+                        <div class="col-6 mb-1">
+                            <label class="form-label" for="fp-default">{{__('admin.subscription expiration date')}}</label>
+                            <input type="text" name="subscription_expiration_date" id="fp-default" class="form-control flatpickr-basic" value="{{$user->subscription_expiration_date}}" placeholder="YYYY-MM-DD" />
+                        </div>
+
+                        <div class="col-6 mb-1">
+                            <label class="form-label" for="fp-default">{{__('admin.product numbers')}}</label>
+                                <input type="number" name="number_of_products" class="form-control" max="500" min="1" value="{{$user->number_of_products}}" />
+                        </div>
+
+                        <div class="mb-1 col-12">
+                            <div class="form-check">
+                                <input type="checkbox" name="subscription_status" {{$user->subscription_status?'checked':''}}  class="form-check-input" id="validationCheckBootstrap" />
+                                <label class="form-check-label" for="validationCheckBootstrap">{{__('admin.subscription status')}}</label>
+                            </div>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
                 </form>
             </div>
@@ -78,4 +98,6 @@
 @endsection
 @section('page-js')
     <script src="{{asset('app-assets/js/scripts/forms/form-validation.js')}}"></script>
+    <script src="{{asset('app-assets/js/scripts/forms/pickers/form-pickers.js')}}"></script>
+    <script src="{{asset('app-assets/js/scripts/forms/form-number-input.js')}}"></script>
 @endsection

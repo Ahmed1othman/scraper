@@ -54,6 +54,7 @@
                         <thead>
                         <tr>
                             <th>#</th>
+
                             <th>{{__('admin.product name')}}</th>
                             <th>{{__('admin.product price')}}</th>
                             <th>{{__('admin.product link')}}</th>

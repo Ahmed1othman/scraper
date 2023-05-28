@@ -32,6 +32,9 @@ class User extends Authenticatable
         'email',
         'status',
         'password',
+        'subscription_status',
+        'subscription_expiration_date',
+        'number_of_products',
         'fcm_token',
     ];
 
@@ -66,6 +69,10 @@ class User extends Authenticatable
     ];
 
 
+    public static function usersCount(){
+        return $userCount = User::role('normal user')->count();
+    }
+
 
 
     // attributes
@@ -92,5 +99,11 @@ class User extends Authenticatable
     public function products()
     {
         return $this->belongsToMany(Product::class, 'user_products')->withPivot('price','status');
+    }
+
+    public function remainingProducts()
+    {
+        $productsCount = $this->products()->count();
+        return $this->number_of_products - $productsCount;
     }
 }

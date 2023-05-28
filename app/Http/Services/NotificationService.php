@@ -11,12 +11,14 @@ use function PHPUnit\Framework\isEmpty;
 
 class NotificationService
 {
-    public function snedPriceNotification(Product $product): void
+    public function sendPriceNotification(Product $product): void
     {
         $productID = $product->id;
         $lastPrice = $product->last_price;
         if ($lastPrice > 0) {
-            $users = User::whereHas('products', function ($query) use ($productID, $lastPrice) {
+            $users = User::where('subscription_status', 1)
+                ->where('status',1)
+                ->whereHas('products', function ($query) use ($productID, $lastPrice) {
                 $query->where('product_id', $productID)
                     ->where('price', '>', $lastPrice)
                     ->where('status', 1);

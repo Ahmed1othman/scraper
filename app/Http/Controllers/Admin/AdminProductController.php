@@ -16,7 +16,7 @@ class AdminProductController extends Controller
      */
     public function index()
     {
-        $products = Product::withCount('users')->paginate(10);
+        $products = Product::orderBy('updated_at','DESC')->withCount('users')->paginate(10);
         return view('admin.admin_products.index',get_defined_vars());
     }
 

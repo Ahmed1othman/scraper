@@ -29,6 +29,9 @@
     <!-- jQuery Validation -->
     <div class="col-md-12 col-12">
         <x-alerts.validation-errors :errors="$errors" />
+        <x-alerts.alerts type="success" />
+        <x-alerts.alerts type="info" />
+        <x-alerts.alerts type="danger" />
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">{{__('admin.add product')}}</h4>

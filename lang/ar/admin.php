@@ -51,6 +51,7 @@ return [
     'product updated successfully'=>'تم تعديل المنتج بنجاح',
     'product deleted successfully'=>'تم مسح المنتج بنجاح',
     'product is already exists'=>'المنتج مضاف بالفعل',
+    'product ID'=>'معرف المنتج',
 
 
     //users
@@ -64,6 +65,15 @@ return [
     'user added successfully'=>'تم اضافة العميل بنجاح',
     'new password'=>'كلمة المرور الجديدة : ',
     'change password'=>'تغيير كلمة المرور ',
+    'edit user'=>'تعديل بيانات العميل',
+    'product numbers'=>'عدد المنتجات المسموح بأضافتها',
+    'subscription status'=>'حالة الاشتراك',
+    'subscription expiration date'=>'تاريخ انتهاء الاشتراك',
+    'subscription details'=>'تفاصيل الاشتراك',
+    'you reach the maximum number of products for your subscription'=>'تم إستهلاك عدد المنتجات المسموح بإضافتها بإشتراكك',
+    'year subscription is expired, contact admins to renew'=>'اشتراكك منتهي, من فضلك تواصل مع ادارة التطبيق لتجديد الاشتراك',
+
+
 
     //service configurations
     'service_configuration'=>'إعدادات الخدمة',

@@ -5,25 +5,25 @@ namespace App\Jobs;
 use App\Http\Services\NotificationService;
 use App\Models\PriceNotification;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 
-class SendPriceNotificationJob implements ShouldQueue
+class CheckSubscriptionJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    private Product $product;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(Product $product)
+    public function __construct()
     {
-        $this->product = $product;
+
     }
 
     /**
@@ -31,7 +31,8 @@ class SendPriceNotificationJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $notificationService = new NotificationService();
-        $notificationService->sendPriceNotification($this->product);
+        $currentDate = Carbon::now();
+        User::normalUsers()->where('subscription_expiration_date', '<', $currentDate->endOfDay())
+            ->update(['subscription_status' => false]);
     }
 }

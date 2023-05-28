@@ -40,6 +40,15 @@ return [
     'user added successfully'=>'user added successfully',
     'user updated successfully'=>'user updated successfully',
     'user deleted successfully'=>'user updated successfully',
+    'edit user'=>'edit user',
+    'product numbers'=>'product numbers',
+    'subscription status'=>'subscription details',
+    'subscription expiration date'=>'subscription expiration date',
+    'subscription details'=>'subscription details',
+    'you reach the maximum number of products for your subscription'=>'you reach the maximum number of products for your subscription',
+    'year subscription is expired, contact admins to renew'=>'year subscription is expired, contact admins to renew',
+    ''=>'',
+    ''=>'',
 
 
 
@@ -64,6 +73,9 @@ return [
     'product updated successfully'=>'product updated successfully',
     'product deleted successfully'=>'product deleted successfully',
     'product is already exists'=>'product is already exists',
+    'product ID'=>'product ID',
+    ''=>'',
+    ''=>'',
 
     //service configurations
     'service_configuration'=>'service configuration',
