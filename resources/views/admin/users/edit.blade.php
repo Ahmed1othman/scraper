@@ -78,8 +78,8 @@
 
                         <div class="mb-1 col-12">
                             <div class="form-check">
-                                <input type="checkbox" name="subscription_status" {{$user->subscription_status?'checked':''}}  class="form-check-input" id="validationCheckBootstrap" />
-                                <label class="form-check-label" for="validationCheckBootstrap">{{__('admin.subscription status')}}</label>
+                                <input type="checkbox" name="subscription_status" {{$user->subscription_status?'checked':''}}  class="form-check-input" id="validationCheckBootstrap1" />
+                                <label class="form-check-label" for="validationCheckBootstrap1">{{__('admin.subscription status')}}</label>
                             </div>
                         </div>
                     </div>

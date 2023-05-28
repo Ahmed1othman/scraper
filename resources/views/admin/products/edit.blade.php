@@ -67,8 +67,8 @@
 
                     <div class="mb-1">
                         <div class="form-check">
-                            <input type="checkbox" name="status" {{$userProduct->status?'checked':''}} class="form-check-input" id="validationCheckBootstrap" />
-                            <label class="form-check-label" for="validationCheckBootstrap">{{__('admin.product status')}}</label>
+                            <input type="checkbox" name="status" {{$userProduct->status?'checked':''}} class="form-check-input" id="validationCheckBootstrap1" />
+                            <label class="form-check-label" for="validationCheckBootstrap1">{{__('admin.product status')}}</label>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary" name="submit" value="Submit">{{__('admin.update')}}</button>
