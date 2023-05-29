@@ -44,16 +44,24 @@ class ChangePasswordRequest extends FormRequest
             case 'PUT':
             {
                 return [
-                    'name' => 'required',
-                    'phone' => 'required|numeric|max:11|unique:users,phone',
-                    'email' => 'nullable|email|sometimes',
-                    'status' => 'required|boolean'
+                    'old_password' => ['required', new CheckOldPassword],
+                    'new_password' => 'required'
                 ];
             }
             default:
                 break;
         }
     }
+
+    public function messages()
+    {
+        return [
+            'old_password.required' => trans('messages.كلمة السر القديمة مطلوبة'),
+            'new_password.required' => trans('messages.كلمة السر القديمة مطلوبة'),
+            'name.min' => trans('messages.visitor_name_at_least_3'),
+        ];
+    }
+
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(response()->json($validator->errors(), 422));

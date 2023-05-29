@@ -61,8 +61,12 @@ class LoginController extends Controller
             'password'=>$request->new_password
         ]);
         $user->tokens()->delete();
-        $user->currentAccessToken()->delete();
         $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'تم تغيير كلمة السر بنجاح ',
+            $user->currentAccessToken()->delete()
+        ]);
     }
 
 

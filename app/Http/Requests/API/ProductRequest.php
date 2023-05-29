@@ -19,7 +19,7 @@ class ProductRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'status' => $this->has('status'),
+            'status' => $this->boolean('status'),
         ]);
     }
 
@@ -38,7 +38,6 @@ class ProductRequest extends FormRequest
 //                    'product_name' => 'required',
                     'price' => 'required|numeric',
 //                    'platform' => 'required',
-                    'url' => 'required|url',
                     'status' => 'required|boolean',
                 ];
             }
@@ -48,8 +47,7 @@ class ProductRequest extends FormRequest
                 return [
                     'product_id' => 'required|exists:products,id',
                     'price' => 'required|numeric',
-//                    'status' => 'required|boolean',
-
+                    'status' => 'required|boolean',
                 ];
             }
             default:
