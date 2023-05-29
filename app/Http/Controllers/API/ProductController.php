@@ -30,6 +30,13 @@ class ProductController extends Controller
         $products = $this->productService->getAllUserProducts();
         return response()->json($products);
     }
+
+    public function userProductsPaginated()
+    {
+        $user = auth()->user();
+        $products = $user->products()->paginate(10);
+        return response()->json($products);
+    }
     public function store(ProductRequest $request){
         $user = auth()->user();
         if (!$user->subscription_status){

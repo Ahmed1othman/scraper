@@ -28,7 +28,8 @@ class ProductService
 
     public function getProductById($id)
     {
-        return Product::find($id);
+        $user = auth()->user();
+        return $products = $user->products()->where('product_id',$id)->first();
     }
 
 

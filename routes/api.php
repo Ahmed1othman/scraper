@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/user-products', [ProductController::class, 'userProducts']);
+    Route::get('/user-products-pagination', [ProductController::class, 'userProductsPaginated']);
     Route::post('product/store',[ProductController::class,'store']);
     Route::put('product/update',[ProductController::class,'update']);
     Route::get('/products/{id}', [ProductController::class, 'show']);
