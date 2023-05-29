@@ -39,10 +39,14 @@ class LoginController extends Controller
 
 
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::guard('api')->logout();
+        $user = auth()->user();
+        $user->tokens()->delete();
+        $user->currentAccessToken()->delete();
         return response()->json(['message' => 'Successfully logged out']);
     }
+
+
 
 }
