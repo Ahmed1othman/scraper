@@ -70,7 +70,7 @@ return [
     'subscription status'=>'حالة الاشتراك',
     'subscription expiration date'=>'تاريخ انتهاء الاشتراك',
     'subscription details'=>'تفاصيل الاشتراك',
-    'you reach the maximum number of products for your subscription'=>'تم إستهلاك عدد المنتجات المسموح بإضافتها بإشتراكك',
+    'you reach the maximum number of products for your subscription'=>'تم الوصول للحد الاقصي لاضافة المنتجات ع اشتراكك تواصل مع إدارة التطبيق لزيادة عد المنتجات وترقية الاشتراك لسعة اكبر',
     'year subscription is expired, contact admins to renew'=>'اشتراكك منتهي, من فضلك تواصل مع ادارة التطبيق لتجديد الاشتراك',
 
 

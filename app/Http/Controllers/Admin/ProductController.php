@@ -116,10 +116,6 @@ class ProductController extends Controller
             Session::flash('danger', __('admin.year subscription is expired, contact admins to renew'));
             return back()->withInput();
         }
-        if ($user->remainingProducts()<= 0){
-            Session::flash('danger', __('admin.you reach the maximum number of products for your subscription'));
-            return back()->withInput();
-        }
         $data = $request->only('price','status');
         $userProduct = UserProduct::where('product_id', $id)
             ->where('user_id', $user->id)

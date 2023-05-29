@@ -33,10 +33,16 @@ class ProductController extends Controller
     public function store(ProductRequest $request){
         $user = auth()->user();
         if (!$user->subscription_status){
-            return response()->json(['message' => __('admin.year subscription is expired, contact admins to renew')], 410);
+            return response()->json([
+                    'success'=> false,
+                    'message' => __('اشتراكك منتهي, من فضلك تواصل مع ادارة التطبيق لتجديد الاشتراك')
+            ]);
         }
         if ($user->remainingProducts()<= 0){
-            return response()->json(['message' => __('admin.you reach the maximum number of products for your subscription')], 409);
+            return response()->json([
+                'success'=> false,
+                'message' => __('تم الوصول للحد الاقصي لاضافة المنتجات ع اشتراكك تواصل مع إدارة التطبيق لزيادة عد المنتجات وترقية الاشتراك لسعة اكبر')
+            ]);
         }
 
         $data = $request->only('url');
@@ -68,10 +74,10 @@ class ProductController extends Controller
     {
         $user = auth()->user();
         if (!$user->subscription_status){
-            return response()->json(['message' => __('admin.year subscription is expired, contact admins to renew')], 410);
-        }
-        if ($user->remainingProducts()<= 0){
-            return response()->json(['message' => __('admin.you reach the maximum number of products for your subscription')], 409);
+            return response()->json([
+                'success'=> false,
+                'message' => __('اشتراكك منتهي, من فضلك تواصل مع ادارة التطبيق لتجديد الاشتراك')
+            ]);
         }
          $data = $request->only('price','status');
          $userProduct = UserProduct::where('product_id', $request->product_id)
