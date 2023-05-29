@@ -64,7 +64,10 @@ class ProductController extends Controller
                         'status' => $request->status,
                     ],
                 ]);
-                return response()->json(['message' => 'success'], 200);
+                return response()->json([
+                    'success'=> true,
+                    'message' => 'تم إضافة المنتج الي قائمة منتجاتك بنجاح'
+                ]);
             }
         }
 
@@ -76,7 +79,7 @@ class ProductController extends Controller
         if (!$user->subscription_status){
             return response()->json([
                 'success'=> false,
-                'message' => __('اشتراكك منتهي, من فضلك تواصل مع ادارة التطبيق لتجديد الاشتراك')
+                'message' => 'اشتراكك منتهي, من فضلك تواصل مع ادارة التطبيق لتجديد الاشتراك'
             ]);
         }
          $data = $request->only('price','status');
@@ -85,29 +88,29 @@ class ProductController extends Controller
             ->first();
 
         if (!$userProduct)
-            return response()->json(
-                [
-                    'message' => 'you have not this product',
-                    'code' => '404',
-                ],'200');
+            return response()->json([
+                'success'=> false,
+                'message' => 'هذا المنتج غير موجود بقائمة منتجاتك'
+            ]);
         $result = $userProduct->update($data);
         if ($result)
-            return response()->json(
-                [
-                    'message' => 'success',
-                    'code' => '200',
-                ],'200');
-        return response()->json(
-            [
-                'message' => 'an error',
-                'code' => '404',
-            ],'200');
+            return response()->json([
+                'success'=> true,
+                'message' => 'تم تعديل المنتج'
+            ]);
+        return response()->json([
+            'success'=> false,
+            'message' => 'حدث مشكلة ما الرجاء الاتصال بمحمد عادل'
+        ]);
     }
     public function show($id)
     {
         $product = $this->productService->getProductById($id);
         if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
+            return response()->json([
+                'success'=> false,
+                'message' => 'هذا المنتج غير موجود بقائمة منتجاتك'
+            ]);
         }
         return response()->json($product);
     }
@@ -130,18 +133,16 @@ class ProductController extends Controller
                 $product->delete();
             }
 
-            return response()->json(
-                [
-                    'message' => 'success',
-                    'code' => '200',
-                ],'200');
+            return response()->json([
+                'success'=> true,
+                'message' => 'تم ازالة المنتج من قائمة منتجاتك بنجاح'
+            ]);
         }else
         {
-            return response()->json(
-                [
-                    'message' => 'error',
-                    'code' => '402',
-                ],'200');
+            return response()->json([
+                'success'=> false,
+                'message' => 'حدث مشكلة ما الرجاء الاتصال بمحمد عادل'
+            ]);
         }
 
 
