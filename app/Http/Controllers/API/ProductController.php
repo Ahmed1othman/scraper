@@ -32,7 +32,7 @@ class ProductController extends Controller
     }
     public function store(ProductRequest $request){
         $user = auth()->user();
-        if ($user->subscription_status){
+        if (!$user->subscription_status){
             return response()->json(['message' => __('admin.year subscription is expired, contact admins to renew')], 410);
         }
         if ($user->remainingProducts()<= 0){
@@ -67,7 +67,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request)
     {
         $user = auth()->user();
-        if ($user->subscription_status){
+        if (!$user->subscription_status){
             return response()->json(['message' => __('admin.year subscription is expired, contact admins to renew')], 410);
         }
         if ($user->remainingProducts()<= 0){

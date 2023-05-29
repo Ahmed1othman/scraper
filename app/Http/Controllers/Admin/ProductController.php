@@ -43,7 +43,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $user = auth()->user();
-        if ($user->subscription_status){
+        if (!$user->subscription_status){
             Session::flash('danger', __('admin.year subscription is expired, contact admins to renew'));
             return back()->withInput();
         }
@@ -112,7 +112,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, string $id)
     {
         $user = auth()->user();
-        if ($user->subscription_status){
+        if (!$user->subscription_status){
             Session::flash('danger', __('admin.year subscription is expired, contact admins to renew'));
             return back()->withInput();
         }

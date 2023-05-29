@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dateTime('subscription_expiration_date')->nullable();
             $table->boolean('subscription_status')->default(0);
-            $table->boolean('number_of_products')->default(0);
+            $table->integer('number_of_products')->default(0);
         });
     }
 
