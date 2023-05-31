@@ -24,7 +24,7 @@ class NotificationService
                     ->where('status', 1);
             })->get();
             if (!$users->isEmpty()) {
-//            $this->storeDatabaseNotification($product,$users);
+            $this->storeDatabaseNotification($product,$users);
                 $this->sendRealTimeNotification($product, $users);
             }
         }
@@ -74,7 +74,7 @@ class NotificationService
                 $notification = new PriceNotification();
                 $notification->user_id = $id;
                 $notification->product_id = $product->id;
-                $notification->message = "new price alert for product " .$product->name . "is: " . $product->last_price;
+                $notification->message = "تم تحديث سعر :  " .$product->name . "ليصبح : " . $product->last_price;
                 $notification->save();
             }
     }

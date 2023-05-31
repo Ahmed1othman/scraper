@@ -30,7 +30,9 @@ class CheckSubscription extends Command
     {
         $currentDate = Carbon::now();
         $users = User::normalUsers()->where('subscription_expiration_date', '<', $currentDate->endOfDay())->pluck('id');
-        User::whereIn('id',$users)->update(['subscription_status' => false]);
-//        dispatch(new ScrapeProxiesJob());
+        User::whereIn('id',$users)->update([
+            'subscription_status' => false,
+            'status' => false
+        ]);
     }
 }

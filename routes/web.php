@@ -6,9 +6,11 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ScrapeServiceController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Services\NotificationService;
 use App\Jobs\ScrapeProduct;
 use App\Models\Product;
 use App\Models\Proxy;
+use App\Models\ScrapeService;
 use App\Models\User;
 use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
@@ -176,6 +178,33 @@ Route::get('test-array',function (){
 
 });
 
+
+Route::get('noon',function () {
+        $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+        if (!$scrapServiceConfiguration)
+            return null;
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])
+            ->withBasicAuth($scrapServiceConfiguration->username, $scrapServiceConfiguration->password)
+            ->post('https://realtime.oxylabs.io/v1/queries', [
+                    'source' => 'amazon_product',
+                    'domain' => 'eg',
+                    'query' => 'B091J8H9FW',
+                    'parse' => true,
+                ]
+            );
+        $responseData = $response->json();
+        $status = $response->status();
+            return $productDetails = $responseData['results'][0]['content'];
+            $details =  [
+                'url'=>$productDetails['url'],
+                'price'=>$productDetails['price'],
+                'stock'=>$productDetails['stock'],
+                'product_name'=>$productDetails['title']
+            ];
+
+});
 
 
 
