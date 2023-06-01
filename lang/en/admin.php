@@ -81,6 +81,7 @@ return [
     'users notifications list'=>'users notifications list',
     'message'=>'notification content',
     'phone'=>'user phone',
+    'users_notifications'=>'users notifications',
     'send since'=>'send since',
     'send at'=>'send at',
     'list of all users notifications'=>'list of all users notifications',

@@ -59,6 +59,7 @@ return [
     //notifications
     'users notifications list'=>'اشعارات العملاء',
     'message'=>'محتوى الاشعار',
+    'users_notifications'=>'اشعارات العملاء',
     'phone'=>'رقم هاتف العميل',
     'send since'=>'تم الارسال منذ',
     'send at'=>'تاريخ الارسال',
