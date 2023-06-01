@@ -41,10 +41,13 @@ class ScraperService
                     'url'=>$productDetails['url'],
                     'price'=>$productDetails['price'],
                     'stock'=>$productDetails['stock'],
-                    'product_name'=>$productDetails['title']
+                    'product_name'=>$productDetails['title'],
+                    'coupon'=>$productDetails['coupon']
                 ];
                 $product->update([
                     'last_price'=>$details['price'],
+                    'stock'=>$details['stock'],
+                    'coupon'=>$details['coupon'],
                 ]);
                 $product->save();
                 $notificationService = new NotificationService();

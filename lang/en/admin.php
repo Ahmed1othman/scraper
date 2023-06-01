@@ -47,8 +47,8 @@ return [
     'subscription details'=>'subscription details',
     'you reach the maximum number of products for your subscription'=>'you reach the maximum number of products for your subscription',
     'year subscription is expired, contact admins to renew'=>'year subscription is expired, contact admins to renew',
-    ''=>'',
-    ''=>'',
+    'coupon'=>'coupon',
+    'stock'=>'stock',
 
 
 
@@ -76,6 +76,14 @@ return [
     'product ID'=>'product ID',
     ''=>'',
     ''=>'',
+
+    //notifications
+    'users notifications list'=>'users notifications list',
+    'message'=>'notification content',
+    'phone'=>'user phone',
+    'send since'=>'send since',
+    'send at'=>'send at',
+    'list of all users notifications'=>'list of all users notifications',
 
     //service configurations
     'service_configuration'=>'service configuration',

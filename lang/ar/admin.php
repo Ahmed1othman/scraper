@@ -52,6 +52,17 @@ return [
     'product deleted successfully'=>'تم مسح المنتج بنجاح',
     'product is already exists'=>'المنتج مضاف بالفعل',
     'product ID'=>'معرف المنتج',
+    'coupon'=>'الكوبون',
+    'stock'=>'حالة المنتج فالمخزن',
+
+
+    //notifications
+    'users notifications list'=>'اشعارات العملاء',
+    'message'=>'محتوى الاشعار',
+    'phone'=>'رقم هاتف العميل',
+    'send since'=>'تم الارسال منذ',
+    'send at'=>'تاريخ الارسال',
+    'list of all users notifications'=>'قائمة بجميع اشعارات العملاء',
 
 
     //users

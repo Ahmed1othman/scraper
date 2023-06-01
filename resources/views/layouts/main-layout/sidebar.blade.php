@@ -94,12 +94,22 @@
                                 <span class="menu-item text-truncate" data-i18n="Analytics">{{ __('admin.services list') }}</span>
                             </a>
                         </li>
-{{--                        <li class="{{ request()->routeIs('scrape-services.create') ? 'active' : '' }}">--}}
-{{--                            <a class="d-flex align-items-center" href="{{ route('scrape-services.create') }}">--}}
-{{--                                <i data-feather="circle"></i>--}}
-{{--                                <span class="menu-item text-truncate" data-i18n="eCommerce">{{ __('admin.add new service') }}</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
+                    </ul>
+                </li>
+
+                {{--scrape services--}}
+                <li class="nav-item">
+                    <a class="d-flex align-items-center {{ request()->routeIs('notifications.*') ? 'active' : '' }}" href="#">
+                        <i data-feather="cpu"></i>
+                        <span class="menu-title text-truncate" data-i18n="Dashboards">{{ __('admin.users_notifications') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('admin-notifications.index') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('admin-notifications.index') }}">
+                                <i data-feather="circle"></i>
+                                <span class="menu-item text-truncate" data-i18n="Analytics">{{ __('admin.users notifications list') }}</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -128,6 +138,7 @@
                     </ul>
                 </li>
                 @endif
+
             </ul>
         </div>
     </div>

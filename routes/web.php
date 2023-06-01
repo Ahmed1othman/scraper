@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
@@ -46,6 +47,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::resource('users',UserController::class);
         Route::post('users.change-password',[UserController::class,'changePassword'])->name('users.change.password');
         Route::resource('admin-products',AdminProductController::class);
+        Route::resource('admin-notifications',AdminNotificationController::class);
         Route::resource('scrape-services',ScrapeServiceController::class);
         Route::resource('products',ProductController::class);
 
@@ -109,14 +111,6 @@ Route::get('/message', function () {
 });
 
 
-Route::get('test/user',function (){
-    $product = \App\Models\Product::find(1);
-    $users = $product->users->filter(function($user) use ($product) {
-        return $user->pivot->price >= $product->price;
-    });
-    return $users->pluck('id');
-});
-
 Route::get('sendNotification',function (){
     $products = Product::orderBy('updated_at','ASC')->get();
     if ($products->count() > 0){
@@ -129,53 +123,6 @@ Route::get('sendNotification',function (){
             }
         }
     }
-
-
-
-
-
-
-
-    // try {
-    //     // Determine the queue name based on the index
-    //     $queueName = $queueNames[$index % count($queueNames)];
-
-    //     // Dispatch the job to the specified queue
-    //     Queue::pushOn($queueName, new ScrapeProduct($product));
-
-    //     Log::info('Job dispatched for product ID: ' . $product->id . ' to queue: ' . $queueName);
-    // } catch (\Exception $exception) {
-    //     Log::info($exception->getMessage());
-    // }
-
-});
-//     $products = Product::all();
-//     if ($products->count() > 0)
-//         foreach ($products as $product) {
-//             //make random interval between scrapping request
-// //            $minDelay = '1';
-// //            $maxDelay = '30';
-// //            $delay = rand($minDelay, $maxDelay);
-// //            sleep($delay);
-//             try {
-//                 dispatch(new ScrapeProduct($product));
-//                 Log::info('done');
-//             }catch (\Exception $exception){
-//                 Log::info($exception->getMessage());
-//             }
-//         }
-// });
-
-Route::get('test-array',function (){
-    $product = Product::find(1);
-    $productID = $product->id;
-    $lastPrice = $product->last_price;
-
-    return $users = User::whereHas('products', function ($query) use ($productID, $lastPrice) {
-        $query->where('product_id', $productID)
-            ->where('price', '>', $lastPrice);
-    })  ->get();
-
 });
 
 
@@ -190,19 +137,20 @@ Route::get('noon',function () {
             ->post('https://realtime.oxylabs.io/v1/queries', [
                     'source' => 'amazon_product',
                     'domain' => 'eg',
-                    'query' => 'B091J8H9FW',
+                    'query' => 'B0C155LQMX',
                     'parse' => true,
                 ]
             );
         $responseData = $response->json();
         $status = $response->status();
-            return $productDetails = $responseData['results'][0]['content'];
-            $details =  [
-                'url'=>$productDetails['url'],
-                'price'=>$productDetails['price'],
-                'stock'=>$productDetails['stock'],
-                'product_name'=>$productDetails['title']
-            ];
+        $productDetails = $responseData['results'][0]['content'];
+        return $details =  [
+            'url'=>$productDetails['url'],
+            'price'=>$productDetails['price'],
+            'stock'=>$productDetails['stock'],
+            'product_name'=>$productDetails['title'],
+            'coupon'=>$productDetails['coupon']
+        ];
 
 });
 
