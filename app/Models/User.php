@@ -101,6 +101,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Product::class, 'user_products')->withPivot('price','status');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(PriceNotification::class, 'user_id');
+    }
+
     public function remainingProducts()
     {
         $productsCount = $this->products()->count();

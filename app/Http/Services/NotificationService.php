@@ -24,8 +24,8 @@ class NotificationService
                     ->where('status', 1);
             })->get();
             if (!$users->isEmpty()) {
-            $this->storeDatabaseNotification($product,$users);
                 $this->sendRealTimeNotification($product, $users);
+                $this->storeDatabaseNotification($product,$users);
             }
         }
     }
@@ -67,14 +67,13 @@ class NotificationService
 
     function storeDatabaseNotification(Product $product,$users): void
     {
-        $ids = $product->pluck('id');
-        if (!isEmpty($ids))
-        foreach ($ids as $id)
+        $ids = $users->pluck('id');
+            foreach ($ids as $id)
             {
                 $notification = new PriceNotification();
                 $notification->user_id = $id;
                 $notification->product_id = $product->id;
-                $notification->message = "تم تحديث سعر :  " .$product->name . "ليصبح : " . $product->last_price;
+                $notification->message = "تم تحديث سعر المنتج :  " .$product->product_name . " ليصبح : " . $product->last_price;
                 $notification->save();
             }
     }

@@ -43,7 +43,6 @@ class ScraperService
                     'stock'=>$productDetails['stock'],
                     'product_name'=>$productDetails['title']
                 ];
-                Log::info($details);
                 $product->update([
                     'last_price'=>$details['price'],
                 ]);
@@ -58,25 +57,6 @@ class ScraperService
 
         }
     }
-
-    function extractAmazon($crawler)
-    {
-
-    }
-
-    function extractNoon($crawler)
-    {
-
-    }
-
-
-
-
-
-
-
-
-
 
 
 
