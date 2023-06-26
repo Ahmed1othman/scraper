@@ -30,6 +30,8 @@ class ScrapeProducts extends Command
     public function handle()
     {
         $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+
+
         if ($scrapServiceConfiguration) {
             $products = Product::all();
             foreach ($products as $product) {
@@ -40,7 +42,7 @@ class ScrapeProducts extends Command
                 }
             }
             $this->info('All products scraped successfully!');
-        }
-        $this->info('services is disabled');
+        }else
+            $this->info('services is disabled');
     }
 }

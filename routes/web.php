@@ -7,22 +7,21 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ScrapeServiceController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Services\NotificationService;
+
 use App\Jobs\ScrapeProduct;
 use App\Models\Product;
-use App\Models\Proxy;
+
 use App\Models\ScrapeService;
-use App\Models\User;
+
+
 use Goutte\Client;
-use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpClient\Exception\TransportException;
+use Sunra\PhpSimple\HtmlDomParser;
 use Symfony\Component\HttpClient\HttpClient;
 
 
@@ -153,6 +152,38 @@ Route::get('noon',function () {
         ];
 
 });
+
+
+
+use Symfony\Component\BrowserKit\HttpBrowser;
+
+Route::get('amazon', function () {
+
+    $products = Product::all();
+    foreach ($products as $product) {
+        $url = 'https://proxy.scrapeops.io/v1/?api_key=7b916427-29e1-486e-b80a-7f168e9d0224&url=' . $product->url;
+
+        $client = new HttpBrowser(HttpClient::create(['verify_peer' => false]));
+
+        $crawler = $client->request('GET', $url);
+        // Find the elements containing the price and title
+        $titleElement = $crawler->filter('#productTitle')->first();
+        $priceElement = $crawler->filter('.a-price .a-offscreen')->first();
+        $priceText = $priceElement->text();
+        $titleText = $titleElement->text();
+        // Extract numeric price
+        preg_match('/[0-9.]+/', $priceText, $matches);
+        dump($matches[0]);
+        dump($titleText);
+    }
+});
+
+
+
+
+
+
+
 
 
 

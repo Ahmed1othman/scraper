@@ -5,10 +5,12 @@ use App\Models\Product;
 use App\Models\ScrapeService;
 use Exception;
 use Goutte\Client;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use PHPUnit\Event\Telemetry\Info;
+use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
@@ -21,40 +23,35 @@ class ScraperService
             $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
             if (!$scrapServiceConfiguration)
                 return null;
-            $url = $this->extractProductCodeFromUrl($product->url);
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])
-                ->withBasicAuth($scrapServiceConfiguration->username, $scrapServiceConfiguration->password)
-                ->post('https://realtime.oxylabs.io/v1/queries', [
-                        'source' => 'amazon_product',
-                        'domain' => 'eg',
-                        'query' => $url,
-                        'parse' => true,
-                    ]
-                );
-            $responseData = $response->json();
-            $status = $response->status();
-            if ($status == 200){
-                $productDetails = $responseData['results'][0]['content'];
+            $url = 'https://proxy.scrapeops.io/v1/?api_key='.$scrapServiceConfiguration->password.'&url=' . $product->url;
+
+            $client = new HttpBrowser(HttpClient::create(['verify_peer' => false]));
+
+            $crawler = $client->request('GET', $url);
+
+            // Find the elements containing the price and title
+            $titleElement = $crawler->filter('#productTitle')->first();
+            $priceElement = $crawler->filter('.a-price .a-offscreen')->first();
+            $priceText = $priceElement->text();
+            $titleText = $titleElement->text();
+            // Extract numeric price
+            preg_match('/[0-9.]+/', $priceText, $matches);
+
                 $details =  [
-                    'url'=>$productDetails['url'],
-                    'price'=>$productDetails['price'],
-                    'stock'=>$productDetails['stock'],
-                    'product_name'=>$productDetails['title'],
-                    'coupon'=>$productDetails['coupon']
+                    'price'=>$matches[0],
+//                    'stock'=>$productDetails['stock'],
+                    'product_name'=>$titleText,
+//                    'coupon'=>$productDetails['coupon']
                 ];
                 $product->update([
                     'last_price'=>$details['price'],
-                    'stock'=>$details['stock'],
-                    'coupon'=>$details['coupon'],
+//                    'stock'=>$details['stock'],
+//                    'coupon'=>$details['coupon'],
+                'updated_at'=>Carbon::now()
                 ]);
                 $product->save();
                 $notificationService = new NotificationService();
                 $notificationService->sendPriceNotification($product);
-            }else{
-                return null;
-            }
 
         } elseif ($product->platform == 'noon') {
 
@@ -63,12 +60,61 @@ class ScraperService
 
 
 
-    function extractProductCodeFromUrl($url)
-    {
-        $pattern = '/\/dp\/([A-Z0-9]+)/';
-        preg_match($pattern, $url, $matches);
-        return $matches[1] ?? null;
-    }
+
+//    public function scrape(Product $product)
+//    {
+//        if ($product->platform == 'amazon') {
+//            $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+//            if (!$scrapServiceConfiguration)
+//                return null;
+//            $url = $this->extractProductCodeFromUrl($product->url);
+//            $response = Http::withHeaders([
+//                'Content-Type' => 'application/json',
+//            ])
+//                ->withBasicAuth($scrapServiceConfiguration->username, $scrapServiceConfiguration->password)
+//                ->post('https://realtime.oxylabs.io/v1/queries', [
+//                        'source' => 'amazon_product',
+//                        'domain' => 'eg',
+//                        'query' => $url,
+//                        'parse' => true,
+//                    ]
+//                );
+//            $responseData = $response->json();
+//            $status = $response->status();
+//            if ($status == 200){
+//                $productDetails = $responseData['results'][0]['content'];
+//                $details =  [
+//                    'url'=>$productDetails['url'],
+//                    'price'=>$productDetails['price'],
+//                    'stock'=>$productDetails['stock'],
+//                    'product_name'=>$productDetails['title'],
+//                    'coupon'=>$productDetails['coupon']
+//                ];
+//                $product->update([
+//                    'last_price'=>$details['price'],
+//                    'stock'=>$details['stock'],
+//                    'coupon'=>$details['coupon'],
+//                ]);
+//                $product->save();
+//                $notificationService = new NotificationService();
+//                $notificationService->sendPriceNotification($product);
+//            }else{
+//                return null;
+//            }
+//
+//        } elseif ($product->platform == 'noon') {
+//
+//        }
+//    }
+
+
+
+//    function extractProductCodeFromUrl($url)
+//    {
+//        $pattern = '/\/dp\/([A-Z0-9]+)/';
+//        preg_match($pattern, $url, $matches);
+//        return $matches[1] ?? null;
+//    }
 
 
 //    public function scrape(Product $product)

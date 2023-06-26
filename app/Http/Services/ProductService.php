@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ScrapeService;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -33,23 +34,23 @@ class ProductService
     }
 
 
-    public function storeProduct($data){
+
+        public function storeProduct($data){
 
         $platform = $this->getProductVendor($data['url']);
         if ($platform!=null){
             $result = [];
             if ($platform == 'noon'){
-                 $result = $this->getNoonProductDetails($data['url']);
+                $result = $this->getNoonProductDetails($data['url']);
             }elseif ($platform=='amazon'){
-                $newProductCode = $this->extractAmazonProductCodeFromUrl($data['url']);
-                $existProduct = Product::where('url', 'like', '%' . $newProductCode . '%')->first();
+                $existProduct = Product::where('url', )->first();
                 if ($existProduct){
                     return [
                         'code'=> 200,
                         'data'=>$existProduct,
                     ];
                 }
-                 $result = $this->getAmazonProductDetails($data['url']);
+                $result = $this->getAmazonProductDetails($data['url']);
             }
 
             if ($result==null)
@@ -60,14 +61,50 @@ class ProductService
 
                 $product =  Product::create($data);
                 return [
-                  'code'=> 200,
-                  'data'=>$product,
+                    'code'=> 200,
+                    'data'=>$product,
                 ];
             }
         }else{
             return ['code' => '410','message'=> 'wrong platform'];
         }
     }
+
+//    public function storeProduct($data){
+//
+//        $platform = $this->getProductVendor($data['url']);
+//        if ($platform!=null){
+//            $result = [];
+//            if ($platform == 'noon'){
+//                 $result = $this->getNoonProductDetails($data['url']);
+//            }elseif ($platform=='amazon'){
+//                $newProductCode = $this->extractAmazonProductCodeFromUrl($data['url']);
+//                $existProduct = Product::where('url', 'like', '%' . $newProductCode . '%')->first();
+//                if ($existProduct){
+//                    return [
+//                        'code'=> 200,
+//                        'data'=>$existProduct,
+//                    ];
+//                }
+//                 $result = $this->getAmazonProductDetails($data['url']);
+//            }
+//
+//            if ($result==null)
+//                return ['code' => '405','message'=> 'wrong url, please check data and try again'];
+//            else{
+//                $data['product_name'] = $result['product_name'];
+//                $data['platform'] = $platform;
+//
+//                $product =  Product::create($data);
+//                return [
+//                  'code'=> 200,
+//                  'data'=>$product,
+//                ];
+//            }
+//        }else{
+//            return ['code' => '410','message'=> 'wrong platform'];
+//        }
+//    }
 
     public function getProductVendor(string $url): ?string
     {
@@ -112,36 +149,63 @@ class ProductService
         }
 
     }
+//    function getAmazonProductDetails($url){
+//        $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
+//        if (!$scrapServiceConfiguration)
+//            return null;
+//        $url = $this->extractAmazonProductCodeFromUrl($url);
+//        $response = Http::withHeaders([
+//            'Content-Type' => 'application/json',
+//        ])
+//            ->withBasicAuth($scrapServiceConfiguration->username, $scrapServiceConfiguration->password)
+//            ->post('https://realtime.oxylabs.io/v1/queries', [
+//                    'source' => 'amazon_product',
+//                    'domain' => 'eg',
+//                    'query' => $url,
+//                    'parse' => true,
+//                ]
+//            );
+//        $responseData = $response->json();
+//        $status = $response->status();
+//        if ($status == 200){
+//            $productDetails = $responseData['results'][0]['content'];
+//            return [
+//                'url'=>$productDetails['url'],
+//                'price'=>$productDetails['price'],
+//                'stock'=>$productDetails['stock'],
+//                'product_name'=>$productDetails['title']
+//            ];
+//        }else{
+//            return null;
+//        }
+//    }
     function getAmazonProductDetails($url){
         $scrapServiceConfiguration = ScrapeService::where('status',1)->first();
         if (!$scrapServiceConfiguration)
             return null;
-        $url = $this->extractAmazonProductCodeFromUrl($url);
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])
-            ->withBasicAuth($scrapServiceConfiguration->username, $scrapServiceConfiguration->password)
-            ->post('https://realtime.oxylabs.io/v1/queries', [
-                    'source' => 'amazon_product',
-                    'domain' => 'eg',
-                    'query' => $url,
-                    'parse' => true,
-                ]
-            );
-        $responseData = $response->json();
-        $status = $response->status();
-        if ($status == 200){
-            $productDetails = $responseData['results'][0]['content'];
+
+        $url = 'https://proxy.scrapeops.io/v1/?api_key='.$scrapServiceConfiguration->password.'&url=' . $url;
+
+        $client = new HttpBrowser(HttpClient::create(['verify_peer' => false]));
+
+        $crawler = $client->request('GET', $url);
+
+        // Find the elements containing the price and title
+        $titleElement = $crawler->filter('#productTitle')->first();
+        $priceElement = $crawler->filter('.a-price .a-offscreen')->first();
+        $priceText = $priceElement->text();
+        $titleText = $titleElement->text();
+        // Extract numeric price
+        preg_match('/[0-9.]+/', $priceText, $matches);
+
             return [
-                'url'=>$productDetails['url'],
-                'price'=>$productDetails['price'],
-                'stock'=>$productDetails['stock'],
-                'product_name'=>$productDetails['title']
+                'price'=>$matches[0],
+//                    'stock'=>$productDetails['stock'],
+                'product_name'=>$titleText,
+//                    'coupon'=>$productDetails['coupon']
             ];
-        }else{
-            return null;
-        }
     }
+
 //    function getAmazonProductDetails($url){
 ////        try {
 //        $proxy= getProxy();
